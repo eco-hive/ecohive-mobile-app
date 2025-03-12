@@ -1,4 +1,4 @@
-package com.ecohive.app.theme
+package com.ecohive.app.ui.theme
 
 import androidx.compose.material.Colors
 import androidx.compose.ui.graphics.Color
