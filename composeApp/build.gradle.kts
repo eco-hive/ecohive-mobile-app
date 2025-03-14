@@ -71,6 +71,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.navigation.compose)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.material3)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
