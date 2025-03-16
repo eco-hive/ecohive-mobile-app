@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -15,15 +16,12 @@ fun LandingScreen(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier.fillMaxSize()
+    Scaffold(
+      topBar = {
+
+      },
+
     ) {
-        TextButton(
-            onClick = onClick,
-            modifier = Modifier.fillMaxWidth(0.5f).wrapContentHeight().align(Alignment.Center),
-        ) {
-            Text("Landing Screen")
-        }
 
     }
 }
