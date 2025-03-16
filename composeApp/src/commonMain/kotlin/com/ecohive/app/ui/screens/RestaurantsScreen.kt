@@ -24,5 +24,9 @@ fun RestaurantsScreen(
         ) {
             Text("Restaurants Screen")
         }
+
+        // NOTE: Just for testing a restaurant page, can be removed
+        // RestaurantPage(restaurant = mockRestaurant1, modifier = Modifier.fillMaxWidth())
     }
 }
+
