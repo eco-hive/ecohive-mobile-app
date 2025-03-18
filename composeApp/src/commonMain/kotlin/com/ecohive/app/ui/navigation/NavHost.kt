@@ -4,13 +4,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.Restaurant
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.ShoppingCart
+import androidx.compose.material.icons.outlined.Restaurant
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,12 +19,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -36,10 +34,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.ecohive.app.ui.screens.LandingScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
-import ecohive.composeapp.generated.resources.Res
-import ecohive.composeapp.generated.resources.app_name
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.resources.stringResource
 
 //enum class EcoHiveScreens() {
 //    Landing,
@@ -64,7 +59,7 @@ object Restaurants
 object ShoppingCart
 
 @Serializable
-object Notifications
+object Settings
 
 @Serializable
 object Account
@@ -76,7 +71,8 @@ data class BottomNavDestinations<T : Any>(
     val label: String
 )
 
-val topLevelRoutes = listOf(
+@Composable
+fun topLevelDestinations() = listOf(
     BottomNavDestinations(
         Landing,
         Icons.Default.Home,
@@ -84,16 +80,16 @@ val topLevelRoutes = listOf(
         "Home"
     ),
     BottomNavDestinations(
-        ShoppingCart,
-        Icons.Default.ShoppingCart,
-        Icons.Outlined.ShoppingCart,
-        "Shopping Cart"
+        Restaurants,
+        Icons.Default.Restaurant,
+        Icons.Outlined.Restaurant,
+        "Restaurants"
     ),
     BottomNavDestinations(
-        Notifications,
-        Icons.Default.Notifications,
-        Icons.Outlined.Notifications,
-        "Notifications"
+        Settings,
+        Icons.Default.Settings,
+        Icons.Outlined.Settings,
+        "Settings"
     ),
     BottomNavDestinations(
         Account,
@@ -112,16 +108,20 @@ fun EcoHiveApp(
 ) {
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(Res.string.app_name),
-                        modifier = Modifier.padding(start = 20.dp)
-                    )
-                }
-            )
-        },
+//        topBar = {
+//            TopAppBar(
+//                title = {
+//                    Text(
+//                        text = stringResource(Res.string.app_name),
+//                        modifier = Modifier.padding(start = 20.dp)
+//                    )
+//                },
+//                colors = TopAppBarDefaults.largeTopAppBarColors().copy(
+//                    containerColor = MaterialTheme.colorScheme.tertiary,
+//                    titleContentColor = MaterialTheme.colorScheme.onTertiary
+//                )
+//            )
+//        },
         bottomBar = {
             BottomNavigationBar(navHostController)
         },
@@ -143,8 +143,8 @@ fun EcoHiveApp(
             composable<ShoppingCart> {
                 Text("shopping cart")
             }
-            composable<Notifications> {
-                Text("Notifications")
+            composable<Settings> {
+                Text("Settings")
             }
             composable<Account> {
                 Text("account")
@@ -162,6 +162,7 @@ private fun BottomNavigationBar(navController: NavController, modifier: Modifier
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
+        val topLevelRoutes = topLevelDestinations()
         topLevelRoutes.forEach { topLevelRoute ->
             val selected =
                 currentDestination?.hierarchy?.any { it.hasRoute(topLevelRoute.destination::class) } == true
