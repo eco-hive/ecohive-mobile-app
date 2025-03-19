@@ -3,10 +3,12 @@ package com.ecohive.app.ui.navigation
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Restaurant
@@ -93,8 +95,8 @@ fun topLevelDestinations() = listOf(
     ),
     BottomNavDestinations(
         Account,
-        Icons.Default.Person,
-        Icons.Outlined.Person,
+        Icons.Default.AccountCircle,
+        Icons.Outlined.AccountCircle,
         "Account"
     )
 )
