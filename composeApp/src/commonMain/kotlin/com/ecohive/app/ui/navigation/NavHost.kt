@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -110,20 +108,6 @@ fun EcoHiveApp(
 ) {
 
     Scaffold(
-//        topBar = {
-//            TopAppBar(
-//                title = {
-//                    Text(
-//                        text = stringResource(Res.string.app_name),
-//                        modifier = Modifier.padding(start = 20.dp)
-//                    )
-//                },
-//                colors = TopAppBarDefaults.largeTopAppBarColors().copy(
-//                    containerColor = MaterialTheme.colorScheme.tertiary,
-//                    titleContentColor = MaterialTheme.colorScheme.onTertiary
-//                )
-//            )
-//        },
         bottomBar = {
             BottomNavigationBar(navHostController)
         },
@@ -136,7 +120,7 @@ fun EcoHiveApp(
         ) {
             composable<Landing> {
                 //add screen here
-                LandingScreen(onClick = { navHostController.navigate(Restaurants) })
+                LandingScreen()
             }
             composable<Restaurants> {
                 //add screen here
