@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -33,10 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -80,7 +76,8 @@ fun EcoHiveTopBar(
                     ) {
                         Text(
                             text = selectedLocation.locality,
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onTertiary.copy(0.7f)
                         )
                         Icon(
                             Icons.Default.KeyboardArrowDown,
@@ -193,7 +190,7 @@ fun PromoBanner(modifier: Modifier = Modifier) {
             .background(MaterialTheme.colorScheme.onSecondaryContainer).padding(16.dp)
     ) {
         Text(
-            "Save Food.\nSave Money.\nSave the Planet.",
+            text = "Save Food.\nSave Money.\nSave the Planet.",
             color = MaterialTheme.colorScheme.onTertiary,
             style = MaterialTheme.typography.titleMedium
         )
