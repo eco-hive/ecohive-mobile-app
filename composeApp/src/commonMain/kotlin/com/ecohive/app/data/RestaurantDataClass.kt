@@ -4,6 +4,7 @@ package com.ecohive.app.data
 // which will all be represented by this data class. We do not want confusion between the Restaurant
 // data class and the "restaurant" type of place where the client can order.
 data class Restaurant(
+    val id: Int,
     val name: String,
     val type: RestaurantType, // e.g. restaurant, grocery
     val banner: Int, // Image resource ID
@@ -18,6 +19,7 @@ enum class RestaurantType {
 }
 
 val mockRestaurant1 = Restaurant(
+    id = 1,
     name = "Pasta & Pizza Hub",
     type = RestaurantType.FastFood,
     banner = 1,
@@ -100,6 +102,7 @@ val mockRestaurant1 = Restaurant(
 )
 
 val mockRestaurant2 = Restaurant(
+    id = 2,
     name = "The Gourmet Bakery",
     type = RestaurantType.Bakery,
     banner = 2,
@@ -164,6 +167,7 @@ val mockRestaurant2 = Restaurant(
 )
 
 val mockRestaurant3 = Restaurant(
+    id = 3,
     name = "Spicy Indian Kitchen",
     type = RestaurantType.Restaurant,
     banner = 3,
@@ -209,3 +213,4 @@ val mockRestaurant3 = Restaurant(
     )
 )
 
+val restaurantList = listOf(mockRestaurant1, mockRestaurant2, mockRestaurant3)

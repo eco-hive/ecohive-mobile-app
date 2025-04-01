@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Restaurant
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +32,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.ecohive.app.data.restaurantList
+import com.ecohive.app.ui.pages.RestaurantPage
 import com.ecohive.app.ui.screens.LandingScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
 import kotlinx.serialization.Serializable
@@ -65,6 +66,9 @@ object Settings
 
 @Serializable
 object Account
+
+@Serializable
+data class RestaurantDetails(val id: Int)
 
 data class BottomNavDestinations<T : Any>(
     val destination: T,
@@ -110,20 +114,6 @@ fun EcoHiveApp(
 ) {
 
     Scaffold(
-//        topBar = {
-//            TopAppBar(
-//                title = {
-//                    Text(
-//                        text = stringResource(Res.string.app_name),
-//                        modifier = Modifier.padding(start = 20.dp)
-//                    )
-//                },
-//                colors = TopAppBarDefaults.largeTopAppBarColors().copy(
-//                    containerColor = MaterialTheme.colorScheme.tertiary,
-//                    titleContentColor = MaterialTheme.colorScheme.onTertiary
-//                )
-//            )
-//        },
         bottomBar = {
             BottomNavigationBar(navHostController)
         },
@@ -136,7 +126,11 @@ fun EcoHiveApp(
         ) {
             composable<Landing> {
                 //add screen here
-                LandingScreen(onClick = { navHostController.navigate(Restaurants) })
+                LandingScreen(
+                    goToRestaurantPage = { restaurantId ->
+                        navHostController.navigate(RestaurantDetails(restaurantId))
+                    }
+                )
             }
             composable<Restaurants> {
                 //add screen here
@@ -151,9 +145,15 @@ fun EcoHiveApp(
             composable<Account> {
                 Text("account")
             }
+            composable<RestaurantDetails> {backStackEntry ->
+                val restaurantDetails: RestaurantDetails = backStackEntry.toRoute()
+                val restaurant = restaurantList.find { it.id == restaurantDetails.id }
+                if (restaurant!=null){
+                    RestaurantPage(restaurant)
+                }
+            }
         }
     }
-
 }
 
 @Composable
