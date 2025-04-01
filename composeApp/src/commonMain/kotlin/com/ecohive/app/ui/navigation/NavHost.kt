@@ -32,6 +32,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.ecohive.app.data.restaurantList
+import com.ecohive.app.ui.pages.RestaurantPage
 import com.ecohive.app.ui.screens.LandingScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
 import kotlinx.serialization.Serializable
@@ -63,6 +66,9 @@ object Settings
 
 @Serializable
 object Account
+
+@Serializable
+data class RestaurantDetails(val id: Int)
 
 data class BottomNavDestinations<T : Any>(
     val destination: T,
@@ -120,7 +126,11 @@ fun EcoHiveApp(
         ) {
             composable<Landing> {
                 //add screen here
-                LandingScreen()
+                LandingScreen(
+                    goToRestaurantPage = { restaurantId ->
+                        navHostController.navigate(RestaurantDetails(restaurantId))
+                    }
+                )
             }
             composable<Restaurants> {
                 //add screen here
@@ -134,6 +144,13 @@ fun EcoHiveApp(
             }
             composable<Account> {
                 Text("account")
+            }
+            composable<RestaurantDetails> {backStackEntry ->
+                val restaurantDetails: RestaurantDetails = backStackEntry.toRoute()
+                val restaurant = restaurantList.find { it.id == restaurantDetails.id }
+                if (restaurant!=null){
+                    RestaurantPage(restaurant)
+                }
             }
         }
     }

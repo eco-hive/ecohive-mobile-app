@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ShoppingBasket
 import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
@@ -33,6 +36,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,11 +46,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
 import com.ecohive.app.data.AvailableLocation
+import com.ecohive.app.data.FoodItem
+import com.ecohive.app.data.Restaurant
 import com.ecohive.app.data.availableLocations
+import com.ecohive.app.data.mockRestaurant1
+import com.ecohive.app.data.mockRestaurant2
+import com.ecohive.app.data.mockRestaurant3
+import com.ecohive.app.data.restaurantList
+import com.ecohive.app.ui.components.SimpleFoodCard
+import ecohive.composeapp.generated.resources.Res
+import ecohive.composeapp.generated.resources.compose_multiplatform
+import org.jetbrains.compose.resources.imageResource
+import org.jetbrains.compose.resources.painterResource
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EcoHiveTopBar(
     onClickLocation: (AvailableLocation) -> Unit,
@@ -226,9 +247,79 @@ fun CategoryChips(modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier){
+    Card(modifier.padding(horizontal = 8.dp, vertical = 12.dp).width(150.dp).height(180.dp)){
+        Box(Modifier.padding(12.dp)){
+            AsyncImage(
+                model = foodItem.imageUrl,
+                contentDescription = null,
+                modifier = Modifier.clip(RoundedCornerShape(10.dp)).align(Alignment.TopCenter),
+                error = painterResource(Res.drawable.compose_multiplatform),
+                contentScale = ContentScale.Fit
+            )
+        }
+        // Food Name
+        Column(modifier = Modifier.padding(start = 4.dp)) {
+
+            Text(
+                text = foodItem.name,
+                style = MaterialTheme.typography.titleMedium,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            // Food Price
+            Text(
+                text = "€${foodItem.price}",
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        }
+    }
+}
+
+@Composable
+fun RestaurantItem(restaurant: Restaurant, goToRestaurantPage: (Int) -> Unit, modifier: Modifier = Modifier){
+    val foodItemList = restaurant.menu[restaurant.menu.keys.first()] ?: listOf()
+    Column(modifier){
+        Row{
+            Text(
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                text = restaurant.name,
+                modifier = Modifier.padding(start = 16.dp).align(Alignment.CenterVertically)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            TextButton(
+                onClick = {
+                    goToRestaurantPage(restaurant.id)
+                },
+                modifier = Modifier.padding(end = 8.dp).align(Alignment.CenterVertically),
+                colors = ButtonDefaults.textButtonColors().copy(
+                    containerColor = Color.Transparent,
+                    contentColor = Color(0xffe9b357)
+                )
+            ){
+                Text(
+                    text = "See more",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.W600
+                )
+            }
+        }
+        LazyRow {
+            items(foodItemList){
+                FoodItemElement(it)
+            }
+        }
+    }
+}
+
 
 @Composable
 fun LandingScreen(
+    goToRestaurantPage: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -241,10 +332,20 @@ fun LandingScreen(
         },
         modifier = modifier
     ) { paddingValues ->
-        Column(modifier = Modifier.padding(paddingValues)) {
-            EcoHiveSearchBar()
-            PromoBanner()
-            CategoryChips()
+        LazyColumn(modifier = Modifier.padding(paddingValues)) {
+            item {
+                EcoHiveSearchBar()
+            }
+            item{
+                PromoBanner()
+            }
+            item{
+                CategoryChips()
+            }
+            //restaurant list
+            items(restaurantList) {
+                RestaurantItem(it, goToRestaurantPage)
+            }
         }
 
     }
