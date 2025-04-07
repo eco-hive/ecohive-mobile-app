@@ -73,6 +73,8 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.material3)
             implementation(libs.material.icons.extended)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

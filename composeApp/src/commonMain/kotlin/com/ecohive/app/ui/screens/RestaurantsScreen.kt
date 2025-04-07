@@ -9,6 +9,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.ecohive.app.data.mockRestaurant1
+import com.ecohive.app.ui.pages.RestaurantPage
 
 @Composable
 fun RestaurantsScreen(
@@ -18,15 +20,15 @@ fun RestaurantsScreen(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        TextButton(
-            onClick = onClick,
-            modifier = Modifier.fillMaxWidth(0.5f).wrapContentHeight().align(Alignment.Center),
-        ) {
-            Text("Restaurants Screen")
-        }
+//        TextButton(
+//            onClick = onClick,
+//            modifier = Modifier.fillMaxWidth(0.5f).wrapContentHeight().align(Alignment.Center),
+//        ) {
+//            Text("Restaurants Screen")
+//        }
 
         // NOTE: Just for testing a restaurant page, can be removed
-        // RestaurantPage(restaurant = mockRestaurant1, modifier = Modifier.fillMaxWidth())
+         RestaurantPage(restaurant = mockRestaurant1, modifier = Modifier.fillMaxWidth())
     }
 }
 

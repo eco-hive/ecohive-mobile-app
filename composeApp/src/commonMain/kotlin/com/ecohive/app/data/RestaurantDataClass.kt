@@ -6,7 +6,7 @@ package com.ecohive.app.data
 data class Restaurant(
     val name: String,
     val type: RestaurantType, // e.g. restaurant, grocery
-    val banner: Int, // Image resource ID
+    val bannerUrl: String, // Image resource ID
     val rating: Double,
     val deliveryCharge: Double,
     val eta: String,
@@ -20,7 +20,7 @@ enum class RestaurantType {
 val mockRestaurant1 = Restaurant(
     name = "Pasta & Pizza Hub",
     type = RestaurantType.FastFood,
-    banner = 1,
+    bannerUrl = "https://images.unsplash.com/photo-1699192676286-545f9e23ca25?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBpenphJTIwYW5kJTIwcGFzdGElMjByZXN0YXVyYW50fGVufDB8fDB8fHww",
     rating = 4.5,
     deliveryCharge = 2.99,
     eta = "30-40 min",
@@ -102,7 +102,7 @@ val mockRestaurant1 = Restaurant(
 val mockRestaurant2 = Restaurant(
     name = "The Gourmet Bakery",
     type = RestaurantType.Bakery,
-    banner = 2,
+    bannerUrl = "https://images.unsplash.com/photo-1556745750-68295fefafc5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxzZWFyY2h8MXx8YmFrZXJ5fGVufDB8fDB8fHww",
     rating = 4.7,
     deliveryCharge = 1.99,
     eta = "25-35 min",
@@ -166,7 +166,7 @@ val mockRestaurant2 = Restaurant(
 val mockRestaurant3 = Restaurant(
     name = "Spicy Indian Kitchen",
     type = RestaurantType.Restaurant,
-    banner = 3,
+    bannerUrl = "https://plus.unsplash.com/premium_photo-1682098131736-3318bd23ad39?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGluZGlhbiUyMGtpdGNoZW58ZW58MHx8MHx8fDA%3D",
     rating = 4.8,
     deliveryCharge = 3.49,
     eta = "40-50 min",

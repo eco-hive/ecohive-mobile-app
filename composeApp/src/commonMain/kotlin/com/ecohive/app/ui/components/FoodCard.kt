@@ -1,13 +1,20 @@
 package com.ecohive.app.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.ecohive.app.data.FoodItem
 import com.ecohive.app.data.SpiceLevel
 
@@ -16,34 +23,42 @@ fun SimpleFoodCard(
     foodItem: FoodItem,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp) // FIXME: This padding will be changed to a padding size from theme
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        // Food Name
-        Text(
-            text = foodItem.name,
-            style = MaterialTheme.typography.titleMedium,
-        )
+        // Left: Food info
+        Column(
+            modifier = Modifier
+                .weight(1f)
+        ) {
+            Text(
+                text = foodItem.name,
+                style = MaterialTheme.typography.titleMedium
+            )
 
-        // Food Price
-        Text(
-            text = "€${foodItem.price}",
-            style = MaterialTheme.typography.bodyLarge,
-        )
+            Text(
+                text = foodItem.ingredients.joinToString(", "),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
 
-        // Food Ingredients
-        Text(
-            text = "Ingredients: ${foodItem.ingredients.joinToString(", ")}",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
+            Text(
+                text = "€${foodItem.price}",
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
 
-        // Spice Level
-        Text(
-            text = "Spice Level: ${foodItem.spiceLevel}",
-            style = MaterialTheme.typography.bodyMedium,
+        // Right: Image
+        AsyncImage(
+            model = foodItem.imageUrl,
+            contentDescription = "Food Image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(100.dp)
+                .clip(RoundedCornerShape(8.dp))
         )
     }
 }

@@ -11,8 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.layout.ContentScale
 import com.ecohive.app.data.Restaurant
 import com.ecohive.app.ui.components.SimpleFoodCard
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
 
 
 @Composable
@@ -36,27 +39,56 @@ fun RestaurantPage(restaurant: Restaurant, modifier: Modifier = Modifier) {
             // Scrollable Content
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
-                    // Restaurant Banner
+                    AsyncImage(
+                        model = restaurant.bannerUrl,
+                        contentDescription = "Restaurant Banner",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp)
-                            .background(MaterialTheme.colorScheme.tertiary),
-                        contentAlignment = Alignment.Center
+                            .background(Color.Black.copy(alpha = 0.5f))
+                            .padding(8.dp)
                     ) {
-                        Text(
-                            text = "Restaurant Image",
-                            color = Color.White,
-                            style = MaterialTheme.typography.headlineMedium
-                        )
+                        Row {
+                            Text(
+                                text = restaurant.name,
+                                style = MaterialTheme.typography.titleLarge,
+                                color = Color.White
+                            )
+                            Text(
+                                text = "${restaurant.rating} ⭐",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.White
+                            )
+                        }
                     }
-
-                    // Restaurant Details
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(text = "Rating: ${restaurant.rating} ⭐", style = MaterialTheme.typography.bodyLarge)
-                        Text(text = "Delivery Charge: €${restaurant.deliveryCharge}", style = MaterialTheme.typography.bodyLarge)
-                        Text(text = "ETA: ${restaurant.eta}", style = MaterialTheme.typography.bodyLarge)
-                    }
+//                    // Restaurant Banner
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .height(200.dp)
+//                            .background(MaterialTheme.colorScheme.tertiary),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        AsyncImage(
+//                            model = restaurant.bannerUrl,
+//                            contentDescription = "Restaurant Banner",
+//                            contentScale = ContentScale.Crop,
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .height(200.dp)
+//                        )
+//                    }
+//
+//                    // Restaurant Details
+//                    Column(modifier = Modifier.padding(16.dp)) {
+//                        Text(text = "Rating: ${restaurant.rating} ⭐", style = MaterialTheme.typography.bodyLarge)
+//                        Text(text = "Delivery Charge: €${restaurant.deliveryCharge}", style = MaterialTheme.typography.bodyLarge)
+//                        Text(text = "ETA: ${restaurant.eta}", style = MaterialTheme.typography.bodyLarge)
+//                    }
                 }
 
                 // Food Categories and Items
