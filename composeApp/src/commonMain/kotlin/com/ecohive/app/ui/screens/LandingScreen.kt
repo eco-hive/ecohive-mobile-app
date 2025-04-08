@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -157,6 +158,7 @@ fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
     ) {
         SearchBar(
             inputField = {
+                LocalTextStyle.provides(MaterialTheme.typography.bodySmall)
                 SearchBarDefaults.InputField(
                     onSearch = { },
                     expanded = false,
@@ -178,7 +180,7 @@ fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
                     }
                 )
             },
-            modifier = Modifier.fillMaxWidth(0.8f).padding(end = 10.dp).height(50.dp),
+            modifier = Modifier.fillMaxWidth(0.8f).padding(end = 10.dp),
             expanded = false,
             onExpandedChange = {
                 expanded = it
