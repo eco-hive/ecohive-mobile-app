@@ -9,6 +9,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.ecohive.app.ui.pages.FoodItemPage
 
 @Composable
 fun RestaurantsScreen(
@@ -27,6 +28,7 @@ fun RestaurantsScreen(
 
         // NOTE: Just for testing a restaurant page, can be removed
         // RestaurantPage(restaurant = mockRestaurant1, modifier = Modifier.fillMaxWidth())
+//        FoodItemPage("1", 50)
     }
 }
 
