@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ecohive.app.data.Restaurant
 import com.ecohive.app.ui.components.SimpleFoodCard
+import com.ecohive.app.ui.screens.FoodItemElement
 
 
 @Composable
@@ -69,7 +70,7 @@ fun RestaurantPage(restaurant: Restaurant, modifier: Modifier = Modifier) {
                         )
                     }
                     items(foodItems) { foodItem ->
-                        SimpleFoodCard(foodItem = foodItem, modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp))
+                        FoodItemElement(foodItem)
                     }
                 }
             }
