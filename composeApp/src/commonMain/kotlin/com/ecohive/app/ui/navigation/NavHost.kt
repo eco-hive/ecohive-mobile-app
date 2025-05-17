@@ -11,7 +11,6 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -105,8 +104,6 @@ fun topLevelDestinations() = listOf(
     )
 )
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EcoHiveApp(
     navHostController: NavHostController = rememberNavController(),
@@ -115,7 +112,13 @@ fun EcoHiveApp(
 
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(navHostController)
+            val currentDestination =
+                navHostController.currentBackStackEntryAsState().value?.destination
+            if (topLevelDestinations().any { topLevel ->
+                    currentDestination?.hierarchy?.any { it.hasRoute(topLevel.destination::class) } == true
+                }) {
+                BottomNavigationBar(navHostController)
+            }
         },
         modifier = modifier
     ) { innerPadding ->
@@ -148,7 +151,7 @@ fun EcoHiveApp(
             composable<RestaurantDetails> { backStackEntry ->
                 val restaurantDetails: RestaurantDetails = backStackEntry.toRoute()
                 val restaurant = restaurantList.find { it.id == restaurantDetails.id }
-                if (restaurant!=null){
+                if (restaurant != null) {
                     RestaurantPage(restaurant)
                 }
             }
