@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -52,23 +53,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
 import com.ecohive.app.data.AvailableLocation
 import com.ecohive.app.data.FoodItem
 import com.ecohive.app.data.Restaurant
 import com.ecohive.app.data.availableLocations
-import com.ecohive.app.data.mockRestaurant1
-import com.ecohive.app.data.mockRestaurant2
-import com.ecohive.app.data.mockRestaurant3
 import com.ecohive.app.data.restaurantList
-import com.ecohive.app.ui.components.SimpleFoodCard
 import ecohive.composeapp.generated.resources.Res
 import ecohive.composeapp.generated.resources.compose_multiplatform
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EcoHiveTopBar(
     onClickLocation: (AvailableLocation) -> Unit,
@@ -119,7 +113,8 @@ fun EcoHiveTopBar(
                                 Text(
                                     text = location.locality,
                                     style = MaterialTheme.typography.bodyMedium
-                                ) },
+                                )
+                            },
                             onClick = {
                                 onClickLocation(location)
                                 selectedLocation = location
@@ -149,9 +144,16 @@ fun EcoHiveTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
+fun EcoHiveSearchBar(
+    restaurantList: List<Restaurant>,
+    goToRestaurantPage: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var expanded by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf<String?>(null) }
+    val filteredRestaurants = if (!query.isNullOrBlank()) restaurantList.filter {
+        it.name.contains(query!!, ignoreCase = true)
+    } else emptyList()
     Row(
         modifier = modifier.background(MaterialTheme.colorScheme.tertiary).fillMaxWidth()
             .padding(10.dp)
@@ -160,7 +162,7 @@ fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
             inputField = {
                 LocalTextStyle.provides(MaterialTheme.typography.bodySmall)
                 SearchBarDefaults.InputField(
-                    onSearch = { },
+                    onSearch = { expanded = true },
                     expanded = false,
                     onExpandedChange = { },
                     placeholder = { Text("Search...") },
@@ -168,7 +170,7 @@ fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
                     trailingIcon = {
                         if (expanded) {
                             IconButton(onClick = {
-//                                expanded = false
+                                expanded = false
                             }) {
                                 Icon(Icons.Default.Close, contentDescription = null)
                             }
@@ -182,11 +184,38 @@ fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
             },
             modifier = Modifier.fillMaxWidth(0.8f).padding(end = 10.dp),
             expanded = false,
-            onExpandedChange = {
-                expanded = it
-            },
+            onExpandedChange = {},
             content = {}
         )
+        DropdownMenu(
+            expanded = expanded && filteredRestaurants.isNotEmpty(),
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .fillMaxWidth(0.75f)
+                .heightIn(max = 300.dp)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            filteredRestaurants.forEach { restaurant ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = restaurant.name,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
+                    onClick = {
+                        expanded = false
+                        goToRestaurantPage(restaurant.id)
+                    },
+                    modifier = Modifier.background(
+                        MaterialTheme.colorScheme.background,
+                        shape = RoundedCornerShape(32.dp)
+                    )
+                )
+            }
+        }
+
+
         Spacer(modifier = Modifier.weight(1f))
         IconButton(
             onClick = {},
@@ -250,9 +279,9 @@ fun CategoryChips(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier){
-    Card(modifier.padding(horizontal = 8.dp, vertical = 12.dp).width(150.dp).height(180.dp)){
-        Box(Modifier.padding(12.dp)){
+fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier) {
+    Card(modifier.padding(horizontal = 8.dp, vertical = 12.dp).width(150.dp).height(180.dp)) {
+        Box(Modifier.padding(12.dp)) {
             AsyncImage(
                 model = foodItem.imageUrl,
                 contentDescription = null,
@@ -281,10 +310,14 @@ fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier){
 }
 
 @Composable
-fun RestaurantItem(restaurant: Restaurant, goToRestaurantPage: (Int) -> Unit, modifier: Modifier = Modifier){
+fun RestaurantItem(
+    restaurant: Restaurant,
+    goToRestaurantPage: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val foodItemList = restaurant.menu[restaurant.menu.keys.first()] ?: listOf()
-    Column(modifier){
-        Row{
+    Column(modifier) {
+        Row {
             Text(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
@@ -302,7 +335,7 @@ fun RestaurantItem(restaurant: Restaurant, goToRestaurantPage: (Int) -> Unit, mo
                     containerColor = Color.Transparent,
                     contentColor = Color(0xffe9b357)
                 )
-            ){
+            ) {
                 Text(
                     text = "See more",
                     style = MaterialTheme.typography.bodyMedium,
@@ -311,7 +344,7 @@ fun RestaurantItem(restaurant: Restaurant, goToRestaurantPage: (Int) -> Unit, mo
             }
         }
         LazyRow {
-            items(foodItemList){
+            items(foodItemList) {
                 FoodItemElement(it)
             }
         }
@@ -336,12 +369,12 @@ fun LandingScreen(
     ) { paddingValues ->
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
-                EcoHiveSearchBar()
+                EcoHiveSearchBar(restaurantList, goToRestaurantPage)
             }
-            item{
+            item {
                 PromoBanner()
             }
-            item{
+            item {
                 CategoryChips()
             }
             //restaurant list
