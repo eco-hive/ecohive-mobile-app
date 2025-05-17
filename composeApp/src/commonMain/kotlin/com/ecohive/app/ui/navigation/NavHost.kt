@@ -134,7 +134,7 @@ fun EcoHiveApp(
             }
             composable<Restaurants> {
                 //add screen here
-                RestaurantsScreen(onClick = { navHostController.navigate(Landing) })
+                RestaurantsScreen(onClick = { navHostController.navigate(RestaurantDetails(it)) })
             }
             composable<ShoppingCart> {
                 Text("shopping cart")
@@ -145,7 +145,7 @@ fun EcoHiveApp(
             composable<Account> {
                 Text("account")
             }
-            composable<RestaurantDetails> {backStackEntry ->
+            composable<RestaurantDetails> { backStackEntry ->
                 val restaurantDetails: RestaurantDetails = backStackEntry.toRoute()
                 val restaurant = restaurantList.find { it.id == restaurantDetails.id }
                 if (restaurant!=null){
@@ -161,6 +161,7 @@ private fun BottomNavigationBar(navController: NavController, modifier: Modifier
 
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.tertiary,
+        modifier = modifier
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
