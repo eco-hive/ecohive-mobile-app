@@ -285,9 +285,9 @@ fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier) {
             AsyncImage(
                 model = foodItem.imageUrl,
                 contentDescription = null,
-                modifier = Modifier.clip(RoundedCornerShape(10.dp)).align(Alignment.TopCenter),
+                modifier = Modifier.clip(RoundedCornerShape(10.dp)).align(Alignment.TopCenter).height(80.dp).fillMaxWidth(),
                 error = painterResource(Res.drawable.compose_multiplatform),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Crop
             )
         }
         // Food Name
@@ -315,7 +315,7 @@ fun RestaurantItem(
     goToRestaurantPage: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val foodItemList = restaurant.menu[restaurant.menu.keys.first()] ?: listOf()
+    val foodItemList = restaurant.menu.values.flatten().take(5)
     Column(modifier) {
         Row {
             Text(
