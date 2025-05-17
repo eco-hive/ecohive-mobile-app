@@ -3,17 +3,17 @@ package com.ecohive.app.ui.screens
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.ecohive.app.data.restaurantList
+import com.ecohive.app.data.Restaurant
 import com.ecohive.app.ui.pages.RestaurantListPage
 
 @Composable
 fun RestaurantsScreen(
+    restaurantList: List<Restaurant>,
     onClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val restaurants = restaurantList
         RestaurantListPage(
-            restaurants = restaurants,
+            restaurants = restaurantList,
             onRestaurantClick = onClick,
             modifier = modifier.fillMaxSize()
         )

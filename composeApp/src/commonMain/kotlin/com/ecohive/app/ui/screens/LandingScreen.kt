@@ -59,7 +59,6 @@ import com.ecohive.app.data.FoodItem
 import com.ecohive.app.data.Restaurant
 import com.ecohive.app.data.RestaurantType
 import com.ecohive.app.data.availableLocations
-import com.ecohive.app.data.restaurantList
 import ecohive.composeapp.generated.resources.Res
 import ecohive.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
@@ -67,12 +66,12 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun EcoHiveTopBar(
+    locationSelected: AvailableLocation,
     onClickLocation: (AvailableLocation) -> Unit,
     onCartClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expandedLocationDropdown by remember { mutableStateOf(false) }
-    var selectedLocation by remember { mutableStateOf(availableLocations.first()) }
     TopAppBar(
         title = {
             Row(
@@ -93,7 +92,7 @@ fun EcoHiveTopBar(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = selectedLocation.locality,
+                            text = locationSelected.locality,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onTertiary.copy(0.7f)
                         )
@@ -118,9 +117,8 @@ fun EcoHiveTopBar(
                                 )
                             },
                             onClick = {
-                                onClickLocation(location)
-                                selectedLocation = location
                                 expandedLocationDropdown = false
+                                onClickLocation(location)
                             }
                         )
                     }
@@ -363,13 +361,17 @@ fun RestaurantItem(
 
 @Composable
 fun LandingScreen(
+    restaurantList: List<Restaurant>,
+    locationSelected: AvailableLocation,
+    onLocationSelected: (AvailableLocation) -> Unit,
     goToRestaurantPage: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
             EcoHiveTopBar(
-                onClickLocation = { _ -> },
+                locationSelected = locationSelected,
+                onClickLocation = onLocationSelected,
                 onCartClicked = {},
                 modifier = Modifier.fillMaxWidth()
             )
@@ -378,7 +380,7 @@ fun LandingScreen(
     ) { paddingValues ->
         val filters = Filter.entries.toList()
         var selectedFilter by remember { mutableStateOf(filters.first()) }
-        val filteredRestaurants by remember(selectedFilter) {
+        val filteredRestaurants by remember(selectedFilter, restaurantList) {
             mutableStateOf(
                 restaurantList.filter { restaurant ->
                     when (selectedFilter) {
@@ -392,7 +394,6 @@ fun LandingScreen(
                 }
             )
         }
-
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
                 EcoHiveSearchBar(restaurantList, goToRestaurantPage)
