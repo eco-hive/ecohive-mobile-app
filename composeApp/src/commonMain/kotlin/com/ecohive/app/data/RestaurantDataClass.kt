@@ -16,7 +16,7 @@ data class Restaurant(
 )
 
 enum class RestaurantType {
-    Restaurant, Bakery, Grocery, FastFood,
+    Restaurant, Bakery, Grocery, FastFood, Cafe
 }
 
 val mockRestaurant1 = Restaurant(

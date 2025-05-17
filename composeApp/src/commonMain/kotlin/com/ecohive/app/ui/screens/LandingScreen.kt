@@ -54,8 +54,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.ecohive.app.data.AvailableLocation
+import com.ecohive.app.data.Filter
 import com.ecohive.app.data.FoodItem
 import com.ecohive.app.data.Restaurant
+import com.ecohive.app.data.RestaurantType
 import com.ecohive.app.data.availableLocations
 import com.ecohive.app.data.restaurantList
 import ecohive.composeapp.generated.resources.Res
@@ -250,19 +252,25 @@ fun PromoBanner(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CategoryChips(modifier: Modifier = Modifier) {
-    val filters = listOf("All Deals", "Groceries", "Restaurants", "Bakeries", "Cafes")
+fun CategoryChips(
+    filters: List<Filter>,
+    onFilterSelected: (Filter) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var selectedFilter by remember { mutableStateOf(filters.first()) }
 
     LazyRow(modifier = modifier.fillMaxWidth().padding(vertical = 8.dp)) {
         items(filters) { filter ->
             FilterChip(
                 selected = selectedFilter == filter,
-                onClick = { selectedFilter = filter },
+                onClick = {
+                    selectedFilter = filter
+                    onFilterSelected(filter)
+                },
                 label = {
                     Text(
-                        text = filter,
-                        style = MaterialTheme.typography.labelSmall,
+                        text = filter.title,
+                        style = MaterialTheme.typography.labelMedium,
                         color = if (selectedFilter == filter) MaterialTheme.colorScheme.onTertiary else Color.Black
                     )
                 },
@@ -285,7 +293,8 @@ fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier) {
             AsyncImage(
                 model = foodItem.imageUrl,
                 contentDescription = null,
-                modifier = Modifier.clip(RoundedCornerShape(10.dp)).align(Alignment.TopCenter).height(80.dp).fillMaxWidth(),
+                modifier = Modifier.clip(RoundedCornerShape(10.dp)).align(Alignment.TopCenter)
+                    .height(80.dp).fillMaxWidth(),
                 error = painterResource(Res.drawable.compose_multiplatform),
                 contentScale = ContentScale.Crop
             )
@@ -367,6 +376,23 @@ fun LandingScreen(
         },
         modifier = modifier
     ) { paddingValues ->
+        val filters = Filter.entries.toList()
+        var selectedFilter by remember { mutableStateOf(filters.first()) }
+        val filteredRestaurants by remember(selectedFilter) {
+            mutableStateOf(
+                restaurantList.filter { restaurant ->
+                    when (selectedFilter) {
+                        Filter.ALL_DEALS -> true
+                        Filter.GROCERIES -> restaurant.type == RestaurantType.Grocery
+                        Filter.RESTAURANTS -> restaurant.type == RestaurantType.Restaurant
+                        Filter.BAKERIES -> restaurant.type == RestaurantType.Bakery
+                        Filter.CAFES -> restaurant.type == RestaurantType.Cafe
+                        Filter.FAST_FOOD -> restaurant.type == RestaurantType.FastFood
+                    }
+                }
+            )
+        }
+
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
                 EcoHiveSearchBar(restaurantList, goToRestaurantPage)
@@ -375,10 +401,16 @@ fun LandingScreen(
                 PromoBanner()
             }
             item {
-                CategoryChips()
+                CategoryChips(
+                    filters = filters,
+                    onFilterSelected = { filter ->
+                        // Handle filter selection
+                        selectedFilter = filter
+                    },
+                )
             }
             //restaurant list
-            items(restaurantList) {
+            items(filteredRestaurants) {
                 RestaurantItem(it, goToRestaurantPage)
             }
         }
