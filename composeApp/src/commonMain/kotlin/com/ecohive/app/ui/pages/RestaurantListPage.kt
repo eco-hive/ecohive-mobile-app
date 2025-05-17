@@ -1,8 +1,11 @@
 package com.ecohive.app.ui.pages
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,8 +26,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.ecohive.app.data.Restaurant
+import ecohive.composeapp.generated.resources.Res
+import ecohive.composeapp.generated.resources.compose_multiplatform
+import org.jetbrains.compose.resources.painterResource
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,40 +49,63 @@ fun RestaurantListPage(
         it.name.contains(searchQuery, ignoreCase = true)
     } else restaurants
 
-    Column(modifier) {
+    Column(modifier.fillMaxSize()) {
         //search bar
         SearchBar(
-            query = searchQuery,
-            onQueryChange = { searchQuery = it },
-            onSearch = { /* No-op, filtering is live */ },
-            active = false,
-            onActiveChange = { /* No-op, always not expanded */ },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Search") },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null
+            inputField = {
+                SearchBarDefaults.InputField(
+                    query = searchQuery,
+                    onQueryChange = { searchQuery = it },
+                    onSearch = { /* No-op, filtering is live */ },
+                    expanded = false,
+                    onExpandedChange = { },
+                    enabled = true,
+                    placeholder = { Text("Search") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null
+                        )
+                    },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            Icon(
+                                imageVector = Icons.Filled.Close,
+                                contentDescription = null,
+                                modifier = Modifier.clickable { searchQuery = "" }
+                            )
+                        }
+                    },
+                    colors = SearchBarDefaults.inputFieldColors().copy(
+                        focusedIndicatorColor = MaterialTheme.colorScheme.onTertiary,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.onTertiary,
+                        focusedPlaceholderColor = MaterialTheme.colorScheme.onTertiary,
+                        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onTertiary,
+                        cursorColor = MaterialTheme.colorScheme.onTertiary,
+                        focusedTextColor = MaterialTheme.colorScheme.onTertiary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onTertiary,
+                        focusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary,
+                        unfocusedLeadingIconColor = MaterialTheme.colorScheme.onTertiary,
+                        focusedTrailingIconColor = MaterialTheme.colorScheme.onTertiary,
+                        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onTertiary
+                    ),
+                    interactionSource = null,
                 )
             },
-            trailingIcon = {
-                if (searchQuery.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = null,
-                        modifier = Modifier.clickable { searchQuery = "" }
-                    )
-                }
-            },
+            expanded = false,
+            onExpandedChange = { },
+            modifier = Modifier.fillMaxWidth().background(color = MaterialTheme.colorScheme.tertiary, shape = RectangleShape),
+            shape = RectangleShape,
             colors = SearchBarDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                containerColor = MaterialTheme.colorScheme.tertiary,
+                dividerColor = MaterialTheme.colorScheme.onTertiary
             ),
-            content = {}
+            content = {},
         )
         //restaurant list
         LazyColumn {
             items(filteredRestaurants) { item ->
-                SmallRestaurantCard(
+                SmallRestaurantCardSearch(
                     restaurant = item,
                     onRestaurantClick = onRestaurantClick,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp).fillMaxWidth()
@@ -85,7 +117,7 @@ fun RestaurantListPage(
 }
 
 @Composable
-private fun SmallRestaurantCard(
+private fun SmallRestaurantCardSearch(
     restaurant: Restaurant,
     onRestaurantClick: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -99,13 +131,21 @@ private fun SmallRestaurantCard(
         Column(modifier = Modifier.padding(6.dp).fillMaxWidth()) {
             Text(
                 text = restaurant.name,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(8.dp)
             )
-
+            AsyncImage(
+                model = restaurant.imageUrl,
+                contentDescription = null,
+                modifier = Modifier.fillMaxWidth().height(200.dp),
+                contentScale = ContentScale.FillWidth,
+                error = painterResource(Res.drawable.compose_multiplatform),
+                placeholder = painterResource(Res.drawable.compose_multiplatform),
+            )
             Text(
                 text = restaurant.eta,
                 style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier.align(Alignment.End)
+                modifier = Modifier.align(Alignment.End).padding(8.dp)
             )
         }
     }

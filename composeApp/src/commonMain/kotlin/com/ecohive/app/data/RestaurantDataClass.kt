@@ -11,6 +11,7 @@ data class Restaurant(
     val rating: Double,
     val deliveryCharge: Double,
     val eta: String,
+    val imageUrl: String, // URL for the restaurant's image
     val menu: Map<String, List<FoodItem>> // Categories like "Most Popular", "Pizza", etc.
 )
 
@@ -26,6 +27,7 @@ val mockRestaurant1 = Restaurant(
     rating = 4.5,
     deliveryCharge = 2.99,
     eta = "30-40 min",
+    imageUrl = "https://images.unsplash.com/photo-1655656856175-1d55c60727bb?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     menu = mapOf(
         // Most Popular Items
         "Most Popular" to listOf(
@@ -109,6 +111,7 @@ val mockRestaurant2 = Restaurant(
     rating = 4.7,
     deliveryCharge = 1.99,
     eta = "25-35 min",
+    imageUrl = "https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     menu = mapOf(
         // Breads
         "Breads" to listOf(
@@ -174,6 +177,7 @@ val mockRestaurant3 = Restaurant(
     rating = 4.8,
     deliveryCharge = 3.49,
     eta = "40-50 min",
+    imageUrl = "https://images.unsplash.com/photo-1720777636417-bc75f5203e38?q=80&w=2526&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     menu = mapOf(
         // Starters
         "Starters" to listOf(
