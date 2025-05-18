@@ -3,6 +3,7 @@ package com.ecohive.app.ui.pages
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -10,10 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.ecohive.app.data.Restaurant
 import com.ecohive.app.ui.components.SimpleFoodCard
 import com.ecohive.app.ui.screens.FoodItemElement
+import ecohive.composeapp.generated.resources.Res
+import ecohive.composeapp.generated.resources.compose_multiplatform
+import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
@@ -45,10 +51,13 @@ fun RestaurantPage(restaurant: Restaurant, modifier: Modifier = Modifier) {
                             .background(MaterialTheme.colorScheme.tertiary),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "Restaurant Image",
-                            color = Color.White,
-                            style = MaterialTheme.typography.headlineMedium
+                        AsyncImage(
+                            model = restaurant.imageUrl,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop,
+                            error = painterResource(Res.drawable.compose_multiplatform),
+                            placeholder = painterResource(Res.drawable.compose_multiplatform)
                         )
                     }
 
@@ -68,10 +77,15 @@ fun RestaurantPage(restaurant: Restaurant, modifier: Modifier = Modifier) {
                             style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
                         )
+                        LazyRow {
+                            items(foodItems){
+                                FoodItemElement(
+                                    foodItem = it
+                                )
+                            }
+                        }
                     }
-                    items(foodItems) { foodItem ->
-                        FoodItemElement(foodItem)
-                    }
+
                 }
             }
         }
