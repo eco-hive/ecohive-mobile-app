@@ -52,19 +52,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
 import com.ecohive.app.data.AvailableLocation
 import com.ecohive.app.data.FoodItem
 import com.ecohive.app.data.Restaurant
 import com.ecohive.app.data.availableLocations
-import com.ecohive.app.data.mockRestaurant1
-import com.ecohive.app.data.mockRestaurant2
-import com.ecohive.app.data.mockRestaurant3
 import com.ecohive.app.data.restaurantList
-import com.ecohive.app.ui.components.SimpleFoodCard
 import ecohive.composeapp.generated.resources.Res
 import ecohive.composeapp.generated.resources.compose_multiplatform
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -322,13 +316,14 @@ fun RestaurantItem(restaurant: Restaurant, goToRestaurantPage: (Int) -> Unit, mo
 @Composable
 fun LandingScreen(
     goToRestaurantPage: (Int) -> Unit,
+    onCartClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
             EcoHiveTopBar(
                 onClickLocation = { _ -> },
-                onCartClicked = {},
+                onCartClicked = onCartClicked,
                 modifier = Modifier.fillMaxWidth()
             )
         },

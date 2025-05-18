@@ -1,6 +1,7 @@
 package com.ecohive.app.data
 
 data class FoodItem(
+    val id: Int = 0,
     val imageUrl: String,
     val name: String,
     val price: Double,

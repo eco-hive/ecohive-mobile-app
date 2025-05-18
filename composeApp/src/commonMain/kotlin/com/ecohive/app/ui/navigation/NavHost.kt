@@ -11,7 +11,6 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Restaurant
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -20,7 +19,11 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
@@ -33,10 +36,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.ecohive.app.data.Order
+import com.ecohive.app.data.OrderItem
 import com.ecohive.app.data.restaurantList
 import com.ecohive.app.ui.pages.RestaurantPage
 import com.ecohive.app.ui.screens.LandingScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
+import com.ecohive.app.ui.screens.ShoppingCartScreen
 import kotlinx.serialization.Serializable
 
 //enum class EcoHiveScreens() {
@@ -106,7 +112,6 @@ fun topLevelDestinations() = listOf(
 )
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EcoHiveApp(
     navHostController: NavHostController = rememberNavController(),
@@ -129,6 +134,10 @@ fun EcoHiveApp(
                 LandingScreen(
                     goToRestaurantPage = { restaurantId ->
                         navHostController.navigate(RestaurantDetails(restaurantId))
+                    },
+                    onCartClicked = {
+
+                        navHostController.navigate(ShoppingCart)
                     }
                 )
             }
@@ -136,20 +145,51 @@ fun EcoHiveApp(
                 //add screen here
                 RestaurantsScreen(onClick = { navHostController.navigate(Landing) })
             }
-            composable<ShoppingCart> {
-                Text("shopping cart")
-            }
             composable<Settings> {
                 Text("Settings")
             }
             composable<Account> {
                 Text("account")
             }
-            composable<RestaurantDetails> {backStackEntry ->
+            composable<RestaurantDetails> { backStackEntry ->
                 val restaurantDetails: RestaurantDetails = backStackEntry.toRoute()
                 val restaurant = restaurantList.find { it.id == restaurantDetails.id }
-                if (restaurant!=null){
+                if (restaurant != null) {
                     RestaurantPage(restaurant)
+                }
+            }
+            composable<ShoppingCart> {
+                var currentOrder by remember { mutableStateOf<Order?>(null) }
+                LaunchedEffect(Unit) {
+                    val restaurant = restaurantList.first()
+                    val itemsChosen =
+                        restaurant.menu.values.flatten().take(3).mapIndexed { index, foodItem ->
+                            OrderItem(
+                                orderID = index,
+                                foodItem = foodItem,
+                                quantity = index + 1,
+                                restaurant = restaurant
+                            )
+                        }
+                    currentOrder = Order(
+                        orderID = 1,
+                        restaurant = restaurant,
+                        items = itemsChosen,
+                    )
+                    println("boo- current order: $currentOrder")
+                }
+                if (currentOrder != null) {
+                    println("boo- order diff null")
+                    ShoppingCartScreen(
+                        currentOrder = currentOrder!!,
+                        onItemClick = { _ ->
+                            // Handle item click
+                        },
+                        onPlaceOrder = { _ ->
+                            // Handle place order
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
         }
@@ -161,6 +201,7 @@ private fun BottomNavigationBar(navController: NavController, modifier: Modifier
 
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.tertiary,
+        modifier = modifier
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination

@@ -11,6 +11,7 @@ data class Restaurant(
     val rating: Double,
     val deliveryCharge: Double,
     val eta: String,
+    val discountPercentage: Double = 0.5,
     val menu: Map<String, List<FoodItem>> // Categories like "Most Popular", "Pizza", etc.
 )
 
