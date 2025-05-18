@@ -15,10 +15,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.ecohive.app.data.Restaurant
 import com.ecohive.app.ui.screens.FoodItemElement
+import ecohive.composeapp.generated.resources.Res
+import ecohive.composeapp.generated.resources.compose_multiplatform
+import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
@@ -50,10 +54,13 @@ fun RestaurantPage(restaurant: Restaurant, goToFoodItemDetails: (foodItemId: Int
                             .background(MaterialTheme.colorScheme.tertiary),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = "Restaurant Image",
-                            color = Color.White,
-                            style = MaterialTheme.typography.headlineMedium
+                        AsyncImage(
+                            model = restaurant.imageUrl,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop,
+                            error = painterResource(Res.drawable.compose_multiplatform),
+                            placeholder = painterResource(Res.drawable.compose_multiplatform)
                         )
                     }
 
@@ -91,6 +98,7 @@ fun RestaurantPage(restaurant: Restaurant, goToFoodItemDetails: (foodItemId: Int
                             }
                         )
                     }
+
                 }
             }
         }

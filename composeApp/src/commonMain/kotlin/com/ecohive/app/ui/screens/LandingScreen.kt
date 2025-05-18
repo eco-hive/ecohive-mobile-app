@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -53,24 +54,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.ecohive.app.data.AvailableLocation
+import com.ecohive.app.data.Filter
 import com.ecohive.app.data.FoodItem
 import com.ecohive.app.data.Restaurant
+import com.ecohive.app.data.RestaurantType
 import com.ecohive.app.data.availableLocations
-import com.ecohive.app.data.restaurantList
 import ecohive.composeapp.generated.resources.Res
 import ecohive.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EcoHiveTopBar(
+    locationSelected: AvailableLocation,
     onClickLocation: (AvailableLocation) -> Unit,
     onCartClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expandedLocationDropdown by remember { mutableStateOf(false) }
-    var selectedLocation by remember { mutableStateOf(availableLocations.first()) }
     TopAppBar(
         title = {
             Row(
@@ -91,7 +92,7 @@ fun EcoHiveTopBar(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = selectedLocation.locality,
+                            text = locationSelected.locality,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onTertiary.copy(0.7f)
                         )
@@ -116,9 +117,8 @@ fun EcoHiveTopBar(
                                 )
                             },
                             onClick = {
-                                onClickLocation(location)
-                                selectedLocation = location
                                 expandedLocationDropdown = false
+                                onClickLocation(location)
                             }
                         )
                     }
@@ -144,9 +144,16 @@ fun EcoHiveTopBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
+fun EcoHiveSearchBar(
+    restaurantList: List<Restaurant>,
+    goToRestaurantPage: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var expanded by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf<String?>(null) }
+    val filteredRestaurants = if (!query.isNullOrBlank()) restaurantList.filter {
+        it.name.contains(query!!, ignoreCase = true)
+    } else emptyList()
     Row(
         modifier = modifier.background(MaterialTheme.colorScheme.tertiary).fillMaxWidth()
             .padding(10.dp)
@@ -155,7 +162,7 @@ fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
             inputField = {
                 LocalTextStyle.provides(MaterialTheme.typography.bodySmall)
                 SearchBarDefaults.InputField(
-                    onSearch = { },
+                    onSearch = { expanded = true },
                     expanded = false,
                     onExpandedChange = { },
                     placeholder = { Text("Search...") },
@@ -163,7 +170,7 @@ fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
                     trailingIcon = {
                         if (expanded) {
                             IconButton(onClick = {
-//                                expanded = false
+                                expanded = false
                             }) {
                                 Icon(Icons.Default.Close, contentDescription = null)
                             }
@@ -177,11 +184,38 @@ fun EcoHiveSearchBar(modifier: Modifier = Modifier) {
             },
             modifier = Modifier.fillMaxWidth(0.8f).padding(end = 10.dp),
             expanded = false,
-            onExpandedChange = {
-                expanded = it
-            },
+            onExpandedChange = {},
             content = {}
         )
+        DropdownMenu(
+            expanded = expanded && filteredRestaurants.isNotEmpty(),
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .fillMaxWidth(0.75f)
+                .heightIn(max = 300.dp)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            filteredRestaurants.forEach { restaurant ->
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = restaurant.name,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    },
+                    onClick = {
+                        expanded = false
+                        goToRestaurantPage(restaurant.id)
+                    },
+                    modifier = Modifier.background(
+                        MaterialTheme.colorScheme.background,
+                        shape = RoundedCornerShape(32.dp)
+                    )
+                )
+            }
+        }
+
+
         Spacer(modifier = Modifier.weight(1f))
         IconButton(
             onClick = {},
@@ -216,19 +250,25 @@ fun PromoBanner(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CategoryChips(modifier: Modifier = Modifier) {
-    val filters = listOf("All Deals", "Groceries", "Restaurants", "Bakeries", "Cafes")
+fun CategoryChips(
+    filters: List<Filter>,
+    onFilterSelected: (Filter) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var selectedFilter by remember { mutableStateOf(filters.first()) }
 
     LazyRow(modifier = modifier.fillMaxWidth().padding(vertical = 8.dp)) {
         items(filters) { filter ->
             FilterChip(
                 selected = selectedFilter == filter,
-                onClick = { selectedFilter = filter },
+                onClick = {
+                    selectedFilter = filter
+                    onFilterSelected(filter)
+                },
                 label = {
                     Text(
-                        text = filter,
-                        style = MaterialTheme.typography.labelSmall,
+                        text = filter.title,
+                        style = MaterialTheme.typography.labelMedium,
                         color = if (selectedFilter == filter) MaterialTheme.colorScheme.onTertiary else Color.Black
                     )
                 },
@@ -251,9 +291,10 @@ fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier) {
             AsyncImage(
                 model = foodItem.imageUrl,
                 contentDescription = null,
-                modifier = Modifier.clip(RoundedCornerShape(10.dp)).align(Alignment.TopCenter),
+                modifier = Modifier.clip(RoundedCornerShape(10.dp)).align(Alignment.TopCenter)
+                    .height(80.dp).fillMaxWidth(),
                 error = painterResource(Res.drawable.compose_multiplatform),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Crop
             )
         }
         // Food Name
@@ -324,6 +365,9 @@ fun RestaurantItem(
 
 @Composable
 fun LandingScreen(
+    restaurantList: List<Restaurant>,
+    locationSelected: AvailableLocation,
+    onLocationSelected: (AvailableLocation) -> Unit,
     goToRestaurantPage: (Int) -> Unit,
     onCartClicked: () -> Unit,
     goToFoodItemDetailsPage: (Int, Int) -> Unit,
@@ -332,25 +376,48 @@ fun LandingScreen(
     Scaffold(
         topBar = {
             EcoHiveTopBar(
-                onClickLocation = { _ -> },
-                onCartClicked = onCartClicked,
+                locationSelected = locationSelected,
+                onClickLocation = onLocationSelected,
+                onCartClicked = onCartClicked ,
                 modifier = Modifier.fillMaxWidth()
             )
         },
         modifier = modifier
     ) { paddingValues ->
+        val filters = Filter.entries.toList()
+        var selectedFilter by remember { mutableStateOf(filters.first()) }
+        val filteredRestaurants by remember(selectedFilter, restaurantList) {
+            mutableStateOf(
+                restaurantList.filter { restaurant ->
+                    when (selectedFilter) {
+                        Filter.ALL_DEALS -> true
+                        Filter.GROCERIES -> restaurant.type == RestaurantType.Grocery
+                        Filter.RESTAURANTS -> restaurant.type == RestaurantType.Restaurant
+                        Filter.BAKERIES -> restaurant.type == RestaurantType.Bakery
+                        Filter.CAFES -> restaurant.type == RestaurantType.Cafe
+                        Filter.FAST_FOOD -> restaurant.type == RestaurantType.FastFood
+                    }
+                }
+            )
+        }
         LazyColumn(modifier = Modifier.padding(paddingValues)) {
             item {
-                EcoHiveSearchBar()
+                EcoHiveSearchBar(restaurantList, goToRestaurantPage)
             }
             item {
                 PromoBanner()
             }
             item {
-                CategoryChips()
+                CategoryChips(
+                    filters = filters,
+                    onFilterSelected = { filter ->
+                        // Handle filter selection
+                        selectedFilter = filter
+                    },
+                )
             }
             //restaurant list
-            items(restaurantList) {
+            items(filteredRestaurants) {
                 RestaurantItem(it, goToRestaurantPage, goToFoodItemDetailsPage)
             }
         }

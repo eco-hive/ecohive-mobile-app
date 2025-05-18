@@ -36,14 +36,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.ecohive.app.data.AvailableLocation
 import com.ecohive.app.data.Order
 import com.ecohive.app.data.OrderItem
+import com.ecohive.app.data.Restaurant
 import com.ecohive.app.data.restaurantList
+import com.ecohive.app.data.restaurantLocationList
 import com.ecohive.app.ui.pages.FoodItemPage
 import com.ecohive.app.ui.pages.RestaurantPage
 import com.ecohive.app.ui.screens.LandingScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
-import com.ecohive.app.ui.screens.ShoppingCartScreen
 import kotlinx.serialization.Serializable
 
 //enum class EcoHiveScreens() {
@@ -124,10 +126,21 @@ fun EcoHiveApp(
 
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(navHostController)
+            val currentDestination =
+                navHostController.currentBackStackEntryAsState().value?.destination
+            if (topLevelDestinations().any { topLevel ->
+                    currentDestination?.hierarchy?.any { it.hasRoute(topLevel.destination::class) } == true
+                }) {
+                BottomNavigationBar(navHostController)
+            }
         },
         modifier = modifier
     ) { innerPadding ->
+        var locationSelected by remember { mutableStateOf(AvailableLocation.CLUJ) }
+        var restaurantList: List<Restaurant> = restaurantLocationList[locationSelected] ?: emptyList()
+        LaunchedEffect(locationSelected) {
+            restaurantList = restaurantLocationList[locationSelected] ?: emptyList()
+        }
         NavHost(
             navController = navHostController,
             startDestination = Landing,
@@ -136,6 +149,12 @@ fun EcoHiveApp(
             composable<Landing> {
                 //add screen here
                 LandingScreen(
+                    restaurantList = restaurantList,
+                    locationSelected = locationSelected,
+                    onLocationSelected = { location ->
+                        // Handle location selection
+                        locationSelected = location
+                    },
                     goToRestaurantPage = { restaurantId ->
                         navHostController.navigate(RestaurantDetails(restaurantId))
                     },
@@ -150,7 +169,10 @@ fun EcoHiveApp(
             }
             composable<Restaurants> {
                 //add screen here
-                RestaurantsScreen(onClick = { navHostController.navigate(Landing) })
+                RestaurantsScreen(
+                    restaurantList = restaurantList,
+                    onClick = { navHostController.navigate(RestaurantDetails(it)) }
+                )
             }
             composable<Settings> {
                 Text("Settings")
