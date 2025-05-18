@@ -1,7 +1,13 @@
 package com.ecohive.app.ui.pages
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -12,12 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.ecohive.app.data.Restaurant
-import com.ecohive.app.ui.components.SimpleFoodCard
 import com.ecohive.app.ui.screens.FoodItemElement
 
 
 @Composable
-fun RestaurantPage(restaurant: Restaurant, modifier: Modifier = Modifier) {
+fun RestaurantPage(restaurant: Restaurant, goToFoodItemDetails: (foodItemId: Int) -> Unit, modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         Column {
             // Persistent Header (Always Visible)
@@ -54,9 +59,18 @@ fun RestaurantPage(restaurant: Restaurant, modifier: Modifier = Modifier) {
 
                     // Restaurant Details
                     Column(modifier = Modifier.padding(16.dp)) {
-                        Text(text = "Rating: ${restaurant.rating} ⭐", style = MaterialTheme.typography.bodyLarge)
-                        Text(text = "Delivery Charge: €${restaurant.deliveryCharge}", style = MaterialTheme.typography.bodyLarge)
-                        Text(text = "ETA: ${restaurant.eta}", style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            text = "Rating: ${restaurant.rating} ⭐",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            text = "Delivery Charge: €${restaurant.deliveryCharge}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            text = "ETA: ${restaurant.eta}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
                     }
                 }
 
@@ -70,7 +84,12 @@ fun RestaurantPage(restaurant: Restaurant, modifier: Modifier = Modifier) {
                         )
                     }
                     items(foodItems) { foodItem ->
-                        FoodItemElement(foodItem)
+                        FoodItemElement(
+                            foodItem = foodItem,
+                            modifier = Modifier.clickable {
+                                goToFoodItemDetails(foodItem.id)
+                            }
+                        )
                     }
                 }
             }

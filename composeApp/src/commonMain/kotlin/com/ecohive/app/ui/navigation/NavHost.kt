@@ -39,6 +39,7 @@ import androidx.navigation.toRoute
 import com.ecohive.app.data.Order
 import com.ecohive.app.data.OrderItem
 import com.ecohive.app.data.restaurantList
+import com.ecohive.app.ui.pages.FoodItemPage
 import com.ecohive.app.ui.pages.RestaurantPage
 import com.ecohive.app.ui.screens.LandingScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
@@ -75,6 +76,9 @@ object Account
 
 @Serializable
 data class RestaurantDetails(val id: Int)
+
+@Serializable
+data class FoodItemDetails(val restaurantId: Int, val foodItemId: Int)
 
 data class BottomNavDestinations<T : Any>(
     val destination: T,
@@ -138,7 +142,10 @@ fun EcoHiveApp(
                     onCartClicked = {
 
                         navHostController.navigate(ShoppingCart)
-                    }
+                    },
+                    goToFoodItemDetailsPage = { foodItemId, restaurantId ->
+                        navHostController.navigate(FoodItemDetails(restaurantId, foodItemId))
+                    },
                 )
             }
             composable<Restaurants> {
@@ -155,7 +162,13 @@ fun EcoHiveApp(
                 val restaurantDetails: RestaurantDetails = backStackEntry.toRoute()
                 val restaurant = restaurantList.find { it.id == restaurantDetails.id }
                 if (restaurant != null) {
-                    RestaurantPage(restaurant)
+                    RestaurantPage(
+                        restaurant = restaurant,
+                        goToFoodItemDetails = { foodItemId ->
+                            navHostController.navigate(FoodItemDetails(restaurant.id, foodItemId))
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
             composable<ShoppingCart> {
@@ -188,6 +201,20 @@ fun EcoHiveApp(
                         onPlaceOrder = { _ ->
                             // Handle place order
                         },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
+            composable<FoodItemDetails> {
+                val foodItemDetails: FoodItemDetails = it.toRoute()
+                val restaurant = restaurantList.find { it.id == foodItemDetails.restaurantId }
+                val foodItem = restaurant?.menu?.values?.flatten()
+                    ?.find { it.id == foodItemDetails.foodItemId }
+                if (foodItem != null) {
+                    // Show food item details
+                    FoodItemPage(
+                        foodItem = foodItem,
+                        discount = restaurant.discountPercentage,
                         modifier = Modifier.fillMaxSize()
                     )
                 }

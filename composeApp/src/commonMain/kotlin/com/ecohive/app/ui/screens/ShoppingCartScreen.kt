@@ -110,8 +110,10 @@ private fun OrderItemElement(
             }
             Text(
                 text = orderItem.quantity.toString(),
-                style = MaterialTheme.typography.displayMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
             )
             IconButton(
                 onClick = {

@@ -113,7 +113,8 @@ fun EcoHiveTopBar(
                                 Text(
                                     text = location.locality,
                                     style = MaterialTheme.typography.bodyMedium
-                                ) },
+                                )
+                            },
                             onClick = {
                                 onClickLocation(location)
                                 selectedLocation = location
@@ -244,9 +245,9 @@ fun CategoryChips(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier){
-    Card(modifier.padding(horizontal = 8.dp, vertical = 12.dp).width(150.dp).height(180.dp)){
-        Box(Modifier.padding(12.dp)){
+fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier) {
+    Card(modifier.padding(horizontal = 8.dp, vertical = 12.dp).width(150.dp).height(180.dp)) {
+        Box(Modifier.padding(12.dp)) {
             AsyncImage(
                 model = foodItem.imageUrl,
                 contentDescription = null,
@@ -275,10 +276,15 @@ fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier){
 }
 
 @Composable
-fun RestaurantItem(restaurant: Restaurant, goToRestaurantPage: (Int) -> Unit, modifier: Modifier = Modifier){
+fun RestaurantItem(
+    restaurant: Restaurant,
+    goToRestaurantPage: (Int) -> Unit,
+    goToFoodItemDetailsPage: (Int, Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val foodItemList = restaurant.menu[restaurant.menu.keys.first()] ?: listOf()
-    Column(modifier){
-        Row{
+    Column(modifier) {
+        Row {
             Text(
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
@@ -296,7 +302,7 @@ fun RestaurantItem(restaurant: Restaurant, goToRestaurantPage: (Int) -> Unit, mo
                     containerColor = Color.Transparent,
                     contentColor = Color(0xffe9b357)
                 )
-            ){
+            ) {
                 Text(
                     text = "See more",
                     style = MaterialTheme.typography.bodyMedium,
@@ -305,8 +311,8 @@ fun RestaurantItem(restaurant: Restaurant, goToRestaurantPage: (Int) -> Unit, mo
             }
         }
         LazyRow {
-            items(foodItemList){
-                FoodItemElement(it)
+            items(foodItemList) {
+                FoodItemElement(it, Modifier.clickable {  goToFoodItemDetailsPage(restaurant.id, it.id) })
             }
         }
     }
@@ -317,6 +323,7 @@ fun RestaurantItem(restaurant: Restaurant, goToRestaurantPage: (Int) -> Unit, mo
 fun LandingScreen(
     goToRestaurantPage: (Int) -> Unit,
     onCartClicked: () -> Unit,
+    goToFoodItemDetailsPage: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -333,15 +340,15 @@ fun LandingScreen(
             item {
                 EcoHiveSearchBar()
             }
-            item{
+            item {
                 PromoBanner()
             }
-            item{
+            item {
                 CategoryChips()
             }
             //restaurant list
             items(restaurantList) {
-                RestaurantItem(it, goToRestaurantPage)
+                RestaurantItem(it, goToRestaurantPage, goToFoodItemDetailsPage)
             }
         }
 
