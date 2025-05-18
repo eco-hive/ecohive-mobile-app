@@ -7,9 +7,9 @@ data class Restaurant(
     val id: Int,
     val name: String,
     val type: RestaurantType, // e.g. restaurant, grocery
-    val banner: Int, // Image resource ID
     val rating: Double,
     val deliveryCharge: Double,
+    val discountPercentage: Int,
     val eta: String,
     val imageUrl: String, // URL for the restaurant's image
     val menu: Map<String, List<FoodItem>> // Categories like "Most Popular", "Pizza", etc.
