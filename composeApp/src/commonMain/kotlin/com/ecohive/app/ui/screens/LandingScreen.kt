@@ -282,7 +282,7 @@ fun RestaurantItem(
     goToFoodItemDetailsPage: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val foodItemList = restaurant.menu[restaurant.menu.keys.first()] ?: listOf()
+    val foodItemList = restaurant.menu.values.flatten().take(5)
     Column(modifier) {
         Row {
             Text(
@@ -311,8 +311,11 @@ fun RestaurantItem(
             }
         }
         LazyRow {
-            items(foodItemList) {
-                FoodItemElement(it, Modifier.clickable {  goToFoodItemDetailsPage(restaurant.id, it.id) })
+            items(foodItemList) { foodItem ->
+                FoodItemElement(
+                    foodItem,
+                    Modifier.clickable { goToFoodItemDetailsPage(restaurant.id, foodItem.id) }
+                )
             }
         }
     }

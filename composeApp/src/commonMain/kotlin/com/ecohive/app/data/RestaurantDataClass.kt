@@ -40,7 +40,7 @@ val mockRestaurant1 = Restaurant(
                 spiceLevel = SpiceLevel.NONE
             ),
             FoodItem(
-                id = 1,
+                id = 2,
                 imageUrl = "https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2hlZXNlYnVyZ2VyfGVufDB8fDB8fHww",
                 name = "Cheeseburger",
                 price = 9.99,

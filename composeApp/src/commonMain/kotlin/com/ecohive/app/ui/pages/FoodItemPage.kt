@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontWeight.Companion
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,9 +35,13 @@ import com.ecohive.app.data.FoodItem
 import com.ecohive.app.data.toItemPrice
 
 @Composable
-fun FoodItemPage(foodItem: FoodItem, discount: Double, modifier: Modifier = Modifier, onClose: () -> Unit = {}) {
+fun FoodItemPage(
+    foodItem: FoodItem,
+    discount: Double,
+    modifier: Modifier = Modifier,
+    onClose: () -> Unit = {}
+) {
     Column(modifier = modifier.fillMaxSize()) {
-        // Image Banner Component
         Box(modifier = Modifier.height(250.dp)) {
             AsyncImage(
                 model = foodItem.imageUrl,
@@ -50,7 +56,11 @@ fun FoodItemPage(foodItem: FoodItem, discount: Double, modifier: Modifier = Modi
                     .padding(12.dp)
                     .background(Color.Black.copy(alpha = 0.4f), shape = RoundedCornerShape(50))
             ) {
-                Icon(imageVector = Icons.Default.Close, contentDescription = "Close", tint = Color.White)
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Close",
+                    tint = Color.White
+                )
             }
         }
 
@@ -64,10 +74,13 @@ fun FoodItemPage(foodItem: FoodItem, discount: Double, modifier: Modifier = Modi
                 )
                 Box(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.error, shape = RoundedCornerShape(4.dp))
+                        .background(
+                            MaterialTheme.colorScheme.error,
+                            shape = RoundedCornerShape(4.dp)
+                        )
                         .padding(horizontal = 6.dp, vertical = 2.dp)
                 ) {
-                    Text("${discount}%", color = Color.White, fontSize = 12.sp)
+                    Text("${discount * 100}%", color = Color.White, fontSize = 12.sp)
                 }
             }
 
@@ -83,8 +96,8 @@ fun FoodItemPage(foodItem: FoodItem, discount: Double, modifier: Modifier = Modi
                     )
                 )
                 Spacer(Modifier.width(8.dp))
-                val discountedPrice = ((foodItem.price * (1 - discount)) / 100.0).coerceAtLeast(0.0)
-                val roundedPrice = (discountedPrice * 100).toInt() / 100.0
+                val discountedPrice = (foodItem.price * (1 - discount)).coerceAtLeast(0.0)
+                val roundedPrice = (discountedPrice) // Round to nearest integer
                 Text(
                     text = roundedPrice.toItemPrice(),
                     style = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.error)
@@ -96,7 +109,7 @@ fun FoodItemPage(foodItem: FoodItem, discount: Double, modifier: Modifier = Modi
             // Food Item Ingredients
             Text(
                 text = "Ingredients:",
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )
 
             Text(
@@ -113,16 +126,28 @@ fun FoodItemPage(foodItem: FoodItem, discount: Double, modifier: Modifier = Modi
                     modifier = Modifier
                         .border(
                             width = 1.dp,
-                            color = MaterialTheme.colorScheme.tertiaryContainer, // or Color.Gray, Color(0xFF...)
-                            shape = RoundedCornerShape(8.dp) // optional, makes corners rounded
+                            color = MaterialTheme.colorScheme.tertiaryContainer,
+                            shape = RoundedCornerShape(8.dp)
                         )
                         .background(Color(0xFFEFEFEF), shape = RoundedCornerShape(8.dp))
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("-", Modifier.padding(end = 8.dp), color = MaterialTheme.colorScheme.onBackground,)
-                        Text("1", Modifier.padding(horizontal = 4.dp), color = MaterialTheme.colorScheme.onBackground,)
-                        Text("+", Modifier.padding(start = 8.dp), color = MaterialTheme.colorScheme.onBackground,)
+                        Text(
+                            "-",
+                            Modifier.padding(end = 8.dp),
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                        Text(
+                            "1",
+                            Modifier.padding(horizontal = 4.dp),
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
+                        Text(
+                            "+",
+                            Modifier.padding(start = 8.dp),
+                            color = MaterialTheme.colorScheme.onBackground,
+                        )
                     }
                 }
 
@@ -133,12 +158,12 @@ fun FoodItemPage(foodItem: FoodItem, discount: Double, modifier: Modifier = Modi
                     onClick = { /* Add to cart */ },
                     colors = ButtonDefaults.buttonColors().copy(
                         containerColor = MaterialTheme.colorScheme.tertiary,
-                        contentColor = Color.White
+                        contentColor = MaterialTheme.colorScheme.onTertiary
                     ),
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.height(48.dp)
                 ) {
-                    Text("ADD", color = Color.White)
+                    Text("Add", color = Color.White)
                 }
             }
         }

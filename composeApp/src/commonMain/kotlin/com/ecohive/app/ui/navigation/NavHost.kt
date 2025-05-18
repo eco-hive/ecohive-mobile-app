@@ -143,7 +143,7 @@ fun EcoHiveApp(
 
                         navHostController.navigate(ShoppingCart)
                     },
-                    goToFoodItemDetailsPage = { foodItemId, restaurantId ->
+                    goToFoodItemDetailsPage = { restaurantId, foodItemId ->
                         navHostController.navigate(FoodItemDetails(restaurantId, foodItemId))
                     },
                 )
@@ -205,11 +205,12 @@ fun EcoHiveApp(
                     )
                 }
             }
-            composable<FoodItemDetails> {
-                val foodItemDetails: FoodItemDetails = it.toRoute()
+            composable<FoodItemDetails> { backStackEntry ->
+                val foodItemDetails: FoodItemDetails = backStackEntry.toRoute()
                 val restaurant = restaurantList.find { it.id == foodItemDetails.restaurantId }
                 val foodItem = restaurant?.menu?.values?.flatten()
                     ?.find { it.id == foodItemDetails.foodItemId }
+                println("boo- food item: $foodItem && restaurant: $restaurant")
                 if (foodItem != null) {
                     // Show food item details
                     FoodItemPage(
