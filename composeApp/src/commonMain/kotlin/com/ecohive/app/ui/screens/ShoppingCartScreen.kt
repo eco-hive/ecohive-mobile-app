@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -154,13 +155,14 @@ private fun OrderSection(
     onItemClick: (OrderItem) -> Unit,
     restaurantName: String,
     onAddMoreClick: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(shape = RoundedCornerShape(12.dp), modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
             //back button
             IconButton(
-                onClick = {},
+                onClick = onBackClick,
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
@@ -422,12 +424,14 @@ fun ShoppingCartScreen(
     currentOrder: Order,
     onItemClick: (OrderItem) -> Unit,
     onPlaceOrder: (Order) -> Unit,
+    onBackClick: () -> Unit,
+    onAddMoreClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var currentOrderShown by remember { mutableStateOf(currentOrder) }
     var deliverySelection by remember { mutableStateOf(true) }
     var deliveryLocation by remember { mutableStateOf("") }
-    LazyColumn(modifier.background(color = MaterialTheme.colorScheme.surface).padding(8.dp)) {
+    LazyColumn(modifier.background(color = MaterialTheme.colorScheme.surface), contentPadding = PaddingValues(8.dp)) {
         //first card -> order items
         item {
             OrderSection(
@@ -440,7 +444,8 @@ fun ShoppingCartScreen(
                         else currentOrderShown.items.map { if (it.orderID == orderItem.orderID) orderItem else it }
                     )
                 },
-                onAddMoreClick = {},
+                onAddMoreClick = onAddMoreClick,
+                onBackClick = onBackClick,
                 modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.background)
                     .fillMaxWidth()

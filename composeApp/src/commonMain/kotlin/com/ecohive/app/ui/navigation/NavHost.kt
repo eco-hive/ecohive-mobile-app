@@ -40,12 +40,12 @@ import com.ecohive.app.data.AvailableLocation
 import com.ecohive.app.data.Order
 import com.ecohive.app.data.OrderItem
 import com.ecohive.app.data.Restaurant
-import com.ecohive.app.data.restaurantList
 import com.ecohive.app.data.restaurantLocationList
 import com.ecohive.app.ui.pages.FoodItemPage
 import com.ecohive.app.ui.pages.RestaurantPage
 import com.ecohive.app.ui.screens.LandingScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
+import com.ecohive.app.ui.screens.ShoppingCartScreen
 import kotlinx.serialization.Serializable
 
 //enum class EcoHiveScreens() {
@@ -217,11 +217,19 @@ fun EcoHiveApp(
                     println("boo- order diff null")
                     ShoppingCartScreen(
                         currentOrder = currentOrder!!,
-                        onItemClick = { _ ->
+                        onItemClick = { orderItem ->
                             // Handle item click
+                            navHostController.navigate(FoodItemDetails(restaurantId = currentOrder!!.restaurant.id, foodItemId = orderItem.foodItem.id))
                         },
                         onPlaceOrder = { _ ->
                             // Handle place order
+                        },
+                        onAddMoreClick = {
+                            //goto restaurant page
+                            navHostController.navigate(RestaurantDetails(currentOrder!!.restaurant.id))
+                        },
+                        onBackClick = {
+                            navHostController.popBackStack()
                         },
                         modifier = Modifier.fillMaxSize()
                     )
@@ -238,6 +246,9 @@ fun EcoHiveApp(
                     FoodItemPage(
                         foodItem = foodItem,
                         discount = restaurant.discountPercentage,
+                        onClose = {
+                            navHostController.popBackStack()
+                        },
                         modifier = Modifier.fillMaxSize()
                     )
                 }

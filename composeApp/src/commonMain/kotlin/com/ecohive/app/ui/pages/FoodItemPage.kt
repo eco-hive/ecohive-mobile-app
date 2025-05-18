@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,8 +37,8 @@ import com.ecohive.app.data.toItemPrice
 fun FoodItemPage(
     foodItem: FoodItem,
     discount: Double,
-    modifier: Modifier = Modifier,
-    onClose: () -> Unit = {}
+    onClose: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         Box(modifier = Modifier.height(250.dp)) {
