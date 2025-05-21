@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,7 +27,11 @@ import org.jetbrains.compose.resources.painterResource
 
 
 @Composable
-fun RestaurantPage(restaurant: Restaurant, goToFoodItemDetails: (foodItemId: Int) -> Unit, modifier: Modifier = Modifier) {
+fun RestaurantPage(
+    restaurant: Restaurant,
+    goToFoodItemDetails: (foodItemId: Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Box(modifier = modifier.fillMaxSize()) {
         Column {
             // Persistent Header (Always Visible)
@@ -89,16 +94,17 @@ fun RestaurantPage(restaurant: Restaurant, goToFoodItemDetails: (foodItemId: Int
                             style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
                         )
-                    }
-                    items(foodItems) { foodItem ->
-                        FoodItemElement(
-                            foodItem = foodItem,
-                            modifier = Modifier.clickable {
-                                goToFoodItemDetails(foodItem.id)
+                        LazyRow {
+                            items(foodItems) { foodItem ->
+                                FoodItemElement(
+                                    foodItem = foodItem,
+                                    modifier = Modifier.clickable {
+                                        goToFoodItemDetails(foodItem.id)
+                                    }
+                                )
                             }
-                        )
+                        }
                     }
-
                 }
             }
         }

@@ -76,6 +76,7 @@ kotlin {
             implementation(libs.material.icons.extended)
             implementation(libs.coil.compose)
             implementation(libs.coil.network.ktor)
+            implementation(libs.lifecycle.viewmodel.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
