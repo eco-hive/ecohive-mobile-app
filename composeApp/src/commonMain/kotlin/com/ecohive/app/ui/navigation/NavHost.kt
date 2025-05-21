@@ -110,6 +110,8 @@ fun EcoHiveApp(
     val restaurantList = appViewModel.restaurantList
     val selectedLocation by appViewModel.selectedLocation.collectAsStateWithLifecycle()
     val currentOrder by appViewModel.currentOrder.collectAsStateWithLifecycle()
+    val currentUser by appViewModel.currentUser.collectAsStateWithLifecycle()
+    val allOrders by appViewModel.allOrders.collectAsStateWithLifecycle()
     Scaffold(
         bottomBar = {
             val currentDestination =
@@ -155,7 +157,11 @@ fun EcoHiveApp(
                 Text("Settings")
             }
             composable<Account> {
-                AccountScreen(onClick = { navHostController.navigate(Landing) })
+
+                AccountScreen(
+                    user = currentUser,
+                    orders = allOrders
+                )
             }
             composable<RestaurantDetails> { backStackEntry ->
                 val restaurantDetails: RestaurantDetails = backStackEntry.toRoute()
@@ -183,8 +189,9 @@ fun EcoHiveApp(
                                 )
                             )
                         },
-                        onPlaceOrder = { _ ->
-                            // Handle place order
+                        onPlaceOrder = {
+                            appViewModel.placeOrder()
+                            navHostController.navigate(Account)
                         },
                         onAddMoreClick = {
                             //goto restaurant page

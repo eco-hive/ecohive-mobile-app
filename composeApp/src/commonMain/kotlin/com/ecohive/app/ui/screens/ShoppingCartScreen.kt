@@ -424,7 +424,7 @@ private fun DeliveryLocationSection(
 fun ShoppingCartScreen(
     currentOrder: Order,
     onItemClick: (OrderItem) -> Unit,
-    onPlaceOrder: (Order) -> Unit,
+    onPlaceOrder: () -> Unit,
     onBackClick: () -> Unit,
     onAddMoreClick: () -> Unit,
     onChangeOrderItem: (FoodItem, Int) -> Unit,
@@ -497,7 +497,7 @@ fun ShoppingCartScreen(
                     currentOrder.restaurant.deliveryCharge else 0.0,
                 serviceFee = 4.0,
                 totalSum = totalSum,
-                placeOrder = { onPlaceOrder(currentOrder) },
+                placeOrder = onPlaceOrder,
                 modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.background)
                     .padding(top = 16.dp)
