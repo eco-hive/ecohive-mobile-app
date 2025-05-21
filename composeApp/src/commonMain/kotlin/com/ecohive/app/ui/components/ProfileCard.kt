@@ -18,12 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.ecohive.app.data.UserItem
+import com.ecohive.app.data.User
 
 @Composable
-fun ProfileCard(user: UserItem, modifier: Modifier = Modifier) {
+fun ProfileCard(user: User, modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier.padding(vertical = 8.dp)
+        modifier = modifier.padding(vertical = 8.dp)
     ) {
         // Name
         Row(

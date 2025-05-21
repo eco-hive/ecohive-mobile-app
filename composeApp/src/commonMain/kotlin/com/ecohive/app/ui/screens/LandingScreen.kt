@@ -320,6 +320,7 @@ fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier) {
 fun RestaurantItem(
     restaurant: Restaurant,
     goToRestaurantPage: (Int) -> Unit,
+    goToFoodItemDetailsPage: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val foodItemList = restaurant.menu.values.flatten().take(5)
@@ -351,8 +352,11 @@ fun RestaurantItem(
             }
         }
         LazyRow {
-            items(foodItemList) {
-                FoodItemElement(it)
+            items(foodItemList) { foodItem ->
+                FoodItemElement(
+                    foodItem,
+                    Modifier.clickable { goToFoodItemDetailsPage(restaurant.id, foodItem.id) }
+                )
             }
         }
     }
@@ -365,6 +369,8 @@ fun LandingScreen(
     locationSelected: AvailableLocation,
     onLocationSelected: (AvailableLocation) -> Unit,
     goToRestaurantPage: (Int) -> Unit,
+    onCartClicked: () -> Unit,
+    goToFoodItemDetailsPage: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -372,7 +378,7 @@ fun LandingScreen(
             EcoHiveTopBar(
                 locationSelected = locationSelected,
                 onClickLocation = onLocationSelected,
-                onCartClicked = {},
+                onCartClicked = onCartClicked ,
                 modifier = Modifier.fillMaxWidth()
             )
         },
@@ -412,7 +418,7 @@ fun LandingScreen(
             }
             //restaurant list
             items(filteredRestaurants) {
-                RestaurantItem(it, goToRestaurantPage)
+                RestaurantItem(it, goToRestaurantPage, goToFoodItemDetailsPage)
             }
         }
 
