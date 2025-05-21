@@ -18,6 +18,8 @@ data class Order(
     val orderID: Int,
     val restaurant: Restaurant,
     val items: List<OrderItem>,
+    val date: String,
+    val time: String
 ) {
     fun calculateTotalPrice(): Double {
         return items.sumOf { it.totalPrice }
