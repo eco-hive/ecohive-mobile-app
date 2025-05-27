@@ -20,7 +20,7 @@ fun OrderCard(orderItem: OrderItem, modifier: Modifier = Modifier) {
         modifier = Modifier.padding(vertical = 8.dp)
     ) {
         AsyncImage(
-            model = orderItem.restaurant.banner,
+            model = orderItem.restaurant.imageUrl,
             contentDescription = orderItem.restaurant.name,
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(80.dp)
