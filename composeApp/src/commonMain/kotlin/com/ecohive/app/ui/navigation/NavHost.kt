@@ -44,6 +44,7 @@ import com.ecohive.app.data.restaurantLocationList
 import com.ecohive.app.ui.pages.FoodItemPage
 import com.ecohive.app.ui.pages.RestaurantPage
 import com.ecohive.app.ui.screens.LandingScreen
+import com.ecohive.app.ui.screens.AccountScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
 import com.ecohive.app.ui.screens.ShoppingCartScreen
 import kotlinx.serialization.Serializable
@@ -178,7 +179,7 @@ fun EcoHiveApp(
                 Text("Settings")
             }
             composable<Account> {
-                Text("account")
+                AccountScreen(onClick = { navHostController.navigate(Landing) })
             }
             composable<RestaurantDetails> { backStackEntry ->
                 val restaurantDetails: RestaurantDetails = backStackEntry.toRoute()

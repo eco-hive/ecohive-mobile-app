@@ -31,5 +31,4 @@ data class Order(
         return items.sumOf { it.subTotal }
     }
 }
-
 fun Double.toItemPrice(): String = "$this RON"
