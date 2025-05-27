@@ -1,5 +1,6 @@
 package com.ecohive.app.ui.navigation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -19,13 +20,12 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -36,28 +36,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.ecohive.app.data.AvailableLocation
-import com.ecohive.app.data.Restaurant
-import com.ecohive.app.data.restaurantLocationList
+import com.ecohive.app.ui.pages.FoodItemPage
 import com.ecohive.app.ui.pages.RestaurantPage
 import com.ecohive.app.ui.screens.LandingScreen
 import com.ecohive.app.ui.screens.AccountScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
+import com.ecohive.app.ui.screens.ShoppingCartScreen
 import kotlinx.serialization.Serializable
 
-//enum class EcoHiveScreens() {
-//    Landing,
-//    Restaurants,
-//    FoodItem,
-//    Search,
-//    Profile,
-//    Order,
-//    Payment,
-//    Status,
-//    History
-//}
-
-//declaration of screens (objects for navigation => typesafe)
 @Serializable
 object Landing
 
@@ -76,11 +62,14 @@ object Account
 @Serializable
 data class RestaurantDetails(val id: Int)
 
+@Serializable
+data class FoodItemDetails(val restaurantId: Int, val foodItemId: Int)
+
 data class BottomNavDestinations<T : Any>(
     val destination: T,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    val label: String
+    val label: String,
 )
 
 @Composable
@@ -111,12 +100,18 @@ fun topLevelDestinations() = listOf(
     )
 )
 
+
 @Composable
 fun EcoHiveApp(
+    modifier: Modifier = Modifier,
     navHostController: NavHostController = rememberNavController(),
-    modifier: Modifier = Modifier
+    appViewModel: AppViewModel = viewModel { AppViewModel() },
 ) {
-
+    val restaurantList = appViewModel.restaurantList
+    val selectedLocation by appViewModel.selectedLocation.collectAsStateWithLifecycle()
+    val currentOrder by appViewModel.currentOrder.collectAsStateWithLifecycle()
+    val currentUser by appViewModel.currentUser.collectAsStateWithLifecycle()
+    val allOrders by appViewModel.allOrders.collectAsStateWithLifecycle()
     Scaffold(
         bottomBar = {
             val currentDestination =
@@ -129,11 +124,6 @@ fun EcoHiveApp(
         },
         modifier = modifier
     ) { innerPadding ->
-        var locationSelected by remember { mutableStateOf(AvailableLocation.CLUJ) }
-        var restaurantList: List<Restaurant> = restaurantLocationList[locationSelected] ?: emptyList()
-        LaunchedEffect(locationSelected) {
-            restaurantList = restaurantLocationList[locationSelected] ?: emptyList()
-        }
         NavHost(
             navController = navHostController,
             startDestination = Landing,
@@ -143,14 +133,17 @@ fun EcoHiveApp(
                 //add screen here
                 LandingScreen(
                     restaurantList = restaurantList,
-                    locationSelected = locationSelected,
-                    onLocationSelected = { location ->
-                        // Handle location selection
-                        locationSelected = location
-                    },
+                    locationSelected = selectedLocation,
+                    onLocationSelected = appViewModel::selectNewLocation,
                     goToRestaurantPage = { restaurantId ->
                         navHostController.navigate(RestaurantDetails(restaurantId))
-                    }
+                    },
+                    onCartClicked = {
+                        navHostController.navigate(ShoppingCart)
+                    },
+                    goToFoodItemDetailsPage = { restaurantId, foodItemId ->
+                        navHostController.navigate(FoodItemDetails(restaurantId, foodItemId))
+                    },
                 )
             }
             composable<Restaurants> {
@@ -160,20 +153,99 @@ fun EcoHiveApp(
                     onClick = { navHostController.navigate(RestaurantDetails(it)) }
                 )
             }
-            composable<ShoppingCart> {
-                Text("shopping cart")
-            }
             composable<Settings> {
                 Text("Settings")
             }
             composable<Account> {
-                AccountScreen(onClick = { navHostController.navigate(Landing) })
+
+                AccountScreen(
+                    user = currentUser,
+                    orders = allOrders
+                )
             }
             composable<RestaurantDetails> { backStackEntry ->
                 val restaurantDetails: RestaurantDetails = backStackEntry.toRoute()
                 val restaurant = restaurantList.find { it.id == restaurantDetails.id }
                 if (restaurant != null) {
-                    RestaurantPage(restaurant)
+                    RestaurantPage(
+                        restaurant = restaurant,
+                        goToFoodItemDetails = { foodItemId ->
+                            navHostController.navigate(FoodItemDetails(restaurant.id, foodItemId))
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            }
+            composable<ShoppingCart> {
+                if (currentOrder != null) {
+                    ShoppingCartScreen(
+                        currentOrder = currentOrder!!,
+                        onItemClick = { orderItem ->
+                            // Handle item click
+                            navHostController.navigate(
+                                FoodItemDetails(
+                                    restaurantId = currentOrder!!.restaurant.id,
+                                    foodItemId = orderItem.foodItem.id
+                                )
+                            )
+                        },
+                        onPlaceOrder = {
+                            appViewModel.placeOrder()
+                            navHostController.navigate(Account)
+                        },
+                        onAddMoreClick = {
+                            //goto restaurant page
+                            navHostController.navigate(RestaurantDetails(currentOrder!!.restaurant.id))
+                        },
+                        onBackClick = {
+                            navHostController.popBackStack()
+                        },
+                        onChangeOrderItem = { foodItem, quantity ->
+                            appViewModel.addFoodItemToCart(
+                                restaurantID = currentOrder!!.restaurant.id,
+                                foodItem = foodItem,
+                                newQuantity = quantity,
+                            )
+
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    Box(modifier.fillMaxSize()) {
+                        Text(
+                            text = "Your cart is empty!",
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                }
+            }
+            composable<FoodItemDetails> { backStackEntry ->
+                val foodItemDetails: FoodItemDetails = backStackEntry.toRoute()
+                val restaurant = restaurantList.find { it.id == foodItemDetails.restaurantId }
+                val foodItem = restaurant?.menu?.values?.flatten()
+                    ?.find { it.id == foodItemDetails.foodItemId }
+                if (foodItem != null) {
+                    // Show food item details
+                    FoodItemPage(
+                        foodItem = foodItem,
+                        discount = restaurant.discountPercentage,
+                        onClose = {
+                            navHostController.popBackStack()
+                        },
+                        onAddItemToCart = { quantity ->
+                            val currentOrderQuantity =
+                                currentOrder?.items?.filter { it.foodItem == foodItem }
+                                    ?.map { it.quantity }?.firstOrNull() ?: 0
+                            appViewModel.addFoodItemToCart(
+                                restaurant.id,
+                                newQuantity = quantity + currentOrderQuantity,
+                                foodItem = foodItem
+                            )
+                            navHostController.popBackStack()
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
         }

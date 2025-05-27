@@ -1,7 +1,9 @@
 package com.ecohive.app.data
 
+import kotlin.math.round
+
 data class FoodItem(
-    val id: String,
+    val id: Int = 0,
     val imageUrl: String,
     val name: String,
     val price: Double,
@@ -17,7 +19,6 @@ enum class SpiceLevel {
 val mockFoodItems = listOf(
     // Most Popular
     FoodItem(
-        id = "1",
         imageUrl = "",
         name = "Margherita Pizza",
         price = 12.99,
@@ -25,7 +26,6 @@ val mockFoodItems = listOf(
         spiceLevel = SpiceLevel.NONE
     ),
     FoodItem(
-        id = "2",
         imageUrl = "",
         name = "Cheeseburger",
         price = 9.99,
@@ -35,7 +35,6 @@ val mockFoodItems = listOf(
 
     // Pasta
     FoodItem(
-        id = "3",
         imageUrl = "",
         name = "Carbonara",
         price = 13.49,
@@ -43,7 +42,6 @@ val mockFoodItems = listOf(
         spiceLevel = SpiceLevel.NONE
     ),
     FoodItem(
-        id = "4",
         imageUrl = "",
         name = "Spaghetti Bolognese",
         price = 11.99,
@@ -53,7 +51,6 @@ val mockFoodItems = listOf(
 
     // Pizza
     FoodItem(
-        id = "5",
         imageUrl = "",
         name = "Pepperoni Pizza",
         price = 14.99,
@@ -61,7 +58,6 @@ val mockFoodItems = listOf(
         spiceLevel = SpiceLevel.MEDIUM
     ),
     FoodItem(
-        id = "6",
         imageUrl = "",
         name = "BBQ Chicken Pizza",
         price = 15.49,
@@ -71,7 +67,6 @@ val mockFoodItems = listOf(
 
     // Salads
     FoodItem(
-        id = "7",
         imageUrl = "",
         name = "Caesar Salad",
         price = 8.99,
@@ -79,7 +74,6 @@ val mockFoodItems = listOf(
         spiceLevel = SpiceLevel.NONE
     ),
     FoodItem(
-        id = "8",
         imageUrl = "",
         name = "Greek Salad",
         price = 9.49,
@@ -89,7 +83,6 @@ val mockFoodItems = listOf(
 
     // Spicy Options
     FoodItem(
-        id = "9",
         imageUrl = "",
         name = "Spicy Chicken Wings",
         price = 10.99,
@@ -97,7 +90,6 @@ val mockFoodItems = listOf(
         spiceLevel = SpiceLevel.EXTRA_HOT
     ),
     FoodItem(
-        id = "10",
         imageUrl = "",
         name = "Spicy Beef Taco",
         price = 7.99,
@@ -105,3 +97,9 @@ val mockFoodItems = listOf(
         spiceLevel = SpiceLevel.HOT
     )
 )
+
+fun Double.roundToTwoDecimals(): Double {
+    var multiplier = 1.0
+    repeat(2) { multiplier *= 10 }
+    return round(this * multiplier) / multiplier
+}
