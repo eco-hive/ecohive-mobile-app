@@ -34,4 +34,4 @@ data class Order(
     }
 }
 
-fun Double.toItemPrice(): String = "$this RON"
+fun Double.toItemPrice(): String = "${this.roundToTwoDecimals()} RON"

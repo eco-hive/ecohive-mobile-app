@@ -1,5 +1,7 @@
 package com.ecohive.app.data
 
+import kotlin.math.round
+
 data class FoodItem(
     val id: Int = 0,
     val imageUrl: String,
@@ -95,3 +97,9 @@ val mockFoodItems = listOf(
         spiceLevel = SpiceLevel.HOT
     )
 )
+
+fun Double.roundToTwoDecimals(): Double {
+    var multiplier = 1.0
+    repeat(2) { multiplier *= 10 }
+    return round(this * multiplier) / multiplier
+}

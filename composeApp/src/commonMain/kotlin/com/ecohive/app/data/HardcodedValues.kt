@@ -171,7 +171,7 @@ val mockRestaurant3 = Restaurant(
     rating = 4.8,
     deliveryCharge = 3.00,
     eta = "40-50 min",
-    discountPercentage = 0.30,
+    discountPercentage = 0.25,
     imageUrl = "https://images.unsplash.com/photo-1720777636417-bc75f5203e38?q=80&w=2526&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     menu = mapOf(
         // Starters
@@ -407,7 +407,7 @@ val mockRestaurant6 = Restaurant(
     rating = 4.0,
     deliveryCharge = 3.00,
     eta = "45-60 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Z3JvY2VyeSUyMHN0b3JlfGVufDB8MHwwfHx8Mg%3D%3D",
     menu = mapOf(
         // Fruits
@@ -499,7 +499,7 @@ val mockRestaurant7 = Restaurant(
     rating = 4.6,
     deliveryCharge = 3.20,
     eta = "35-45 min",
-    discountPercentage = 15.0,
+    discountPercentage = 0.5,
     imageUrl = "https://images.unsplash.com/photo-1571991806255-ef936945b6c7?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c3BpY3klMjByZXN0YXVyYW50fGVufDB8MHwwfHx8Mg%3D%3D",
     menu = mapOf(
         // Appetizers
@@ -516,7 +516,7 @@ val mockRestaurant7 = Restaurant(
                 id = 44,
                 imageUrl = "https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480_1_5x/img/recipe/ras/Assets/F7F38E73-9DE3-4648-AC36-846B91E2EC6C/Derivates/76E238A1-13B9-4115-B1C7-3E93923E299E.jpg",
                 name = "Onion Bhaji",
-                price = 5.90,
+                price = 6.00,
                 ingredients = listOf("Onion", "Gram Flour", "Spices"),
                 spiceLevel = SpiceLevel.MILD
             )
@@ -544,7 +544,7 @@ val mockRestaurant7 = Restaurant(
                 id = 47,
                 imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6GMD_WH9sl6HjJ4CObB9Lim-51zBji9n5KA&s",
                 name = "Paneer Butter Masala",
-                price = 13.00,
+                price = 14.00,
                 ingredients = listOf("Paneer", "Tomato Gravy", "Butter", "Cream", "Spices"),
                 spiceLevel = SpiceLevel.MILD
             )
@@ -591,7 +591,7 @@ val mockRestaurant8 = Restaurant(
     rating = 4.8,
     deliveryCharge = 3.00,
     eta = "40-50 min",
-    discountPercentage = 20.0,
+    discountPercentage = 0.20,
     imageUrl = "https://images.unsplash.com/photo-1568018508399-e53bc8babdde?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8amFwYW5lc2UlMjByZXN0YXVyYW50fGVufDB8MHwwfHx8Mg%3D%3D",
     menu = mapOf(
         // Sushi & Sashimi
@@ -699,7 +699,7 @@ val mockRestaurant9 = Restaurant(
     rating = 4.3,
     deliveryCharge = 2.50,
     eta = "25-35 min",
-    discountPercentage = 15.0,
+    discountPercentage = 0.15,
     imageUrl = "https://images.unsplash.com/photo-1613514785940-daed07799d9b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8dGFjb3N8ZW58MHwwfDB8fHwy",
     menu = mapOf(
         // Tacos
@@ -799,7 +799,7 @@ val mockRestaurant10 = Restaurant(
     rating = 4.3,
     deliveryCharge = 4.00,
     eta = "50-70 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z3JvY2VyeSUyMHN0b3JlfGVufDB8MHwwfHx8Mg%3D%3D",
     menu = mapOf(
         // Organic Produce
@@ -891,7 +891,7 @@ val mockRestaurant11 = Restaurant(
     rating = 4.6,
     deliveryCharge = 1.75,
     eta = "15-25 min",
-    discountPercentage = 10.0,
+    discountPercentage = 0.10,
     imageUrl = "https://images.unsplash.com/photo-1544031064-9de80864ade5?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGNhZmV8ZW58MHwwfDB8fHwy",
     menu = mapOf(
         // Hot Drinks
@@ -983,7 +983,7 @@ val mockRestaurant12 = Restaurant(
     rating = 4.8,
     deliveryCharge = 2.00,
     eta = "20-30 min",
-    discountPercentage = 10.0,
+    discountPercentage = 0.10,
     imageUrl = "https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmFrZXJ5fGVufDB8MHwwfHx8Mg%3D%3D",
     menu = mapOf(
         // Breads
@@ -1075,7 +1075,7 @@ val mockRestaurant13 = Restaurant(
     rating = 4.7,
     deliveryCharge = 3.00,
     eta = "30-45 min",
-    discountPercentage = 10.0,
+    discountPercentage = 0.10,
     imageUrl = "https://images.unsplash.com/photo-1652598558866-2d96d93dc2a3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8Z3JlZWslMjB0YXZlcm5hfGVufDB8MHwwfHx8Mg%3D%3D",
     menu = mapOf(
         // Appetizers (Mezedes)
@@ -1159,7 +1159,7 @@ val mockRestaurant14 = Restaurant(
     rating = 4.0,
     deliveryCharge = 2.00,
     eta = "20-30 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://imageproxy.wolt.com/assets/6825b8a77854afb9cf895a01",
     menu = mapOf(
         // Classic Subs
@@ -1251,7 +1251,7 @@ val mockRestaurant15 = Restaurant(
     rating = 4.9,
     deliveryCharge = 2.20,
     eta = "20-35 min",
-    discountPercentage = 15.0,
+    discountPercentage = 0.15,
     imageUrl = "https://images.unsplash.com/photo-1556988790-69f54648859b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c3dlZXRzJTIwYmFrZXJ5fGVufDB8MHwwfHx8Mg%3D%3D",
     menu = mapOf(
         // Cakes & Cupcakes
@@ -1331,7 +1331,7 @@ val mockRestaurant16 = Restaurant(
     rating = 4.7,
     deliveryCharge = 2.00,
     eta = "20-35 min",
-    discountPercentage = 10.0,
+    discountPercentage = 0.10,
     imageUrl = "https://images.unsplash.com/photo-1567752588693-ad10a647c5a3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGJha2VyeXxlbnwwfDB8MHx8fDI%3D",
     menu = mapOf(
         // Artisan Breads
@@ -1403,7 +1403,7 @@ val mockRestaurant17 = Restaurant(
     rating = 4.6,
     deliveryCharge = 3.80,
     eta = "35-50 min",
-    discountPercentage = 15.0,
+    discountPercentage = 0.15,
     imageUrl = "https://images.unsplash.com/photo-1622115837997-90c89ae689f9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     menu = mapOf(
         // Starters
@@ -1495,7 +1495,7 @@ val mockRestaurant18 = Restaurant(
     rating = 3.9,
     deliveryCharge = 1.00,
     eta = "10-20 min",
-    discountPercentage = 5.0,
+    discountPercentage = 0.15,
     imageUrl = "https://images.unsplash.com/photo-1615996001375-c7ef13294436?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8ZmFzdCUyMGZvb2R8ZW58MHwwfDB8fHwy",
     menu = mapOf(
         // Hot Dogs
@@ -1587,7 +1587,7 @@ val mockRestaurant19 = Restaurant(
     rating = 4.1,
     deliveryCharge = 3.20,
     eta = "45-65 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Z3JvY2VyeSUyMHN0b3JlfGVufDB8MHwwfHx8Mg%3D%3D",
     menu = mapOf(
         // Fresh Produce
@@ -1675,7 +1675,7 @@ val mockRestaurant20 = Restaurant(
     rating = 4.9,
     deliveryCharge = 2.20,
     eta = "20-30 min",
-    discountPercentage = 15.0,
+    discountPercentage = 0.25,
     imageUrl = "https://images.unsplash.com/photo-1702770443047-22a2750a84dc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     menu = mapOf(
         // Cakes & Tarts
@@ -1763,7 +1763,7 @@ val mockRestaurant21 = Restaurant(
     rating = 4.5,
     deliveryCharge = 1.90,
     eta = "20-30 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://images.unsplash.com/photo-1559925393-8be0ec4767c8?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FmZXxlbnwwfDB8MHx8fDI%3D",
     menu = mapOf(
         // Coffee & Espresso
@@ -1851,7 +1851,7 @@ val mockRestaurantBucharest1 = Restaurant(
     rating = 4.7,
     deliveryCharge = 2.50,
     eta = "35-45 min",
-    discountPercentage = 10.0,
+    discountPercentage = 0.10,
     imageUrl = "https://plus.unsplash.com/premium_photo-1680357664148-6cab0e119f18?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGJlZXJ8ZW58MHx8MHx8fDA%3D",
     menu = mapOf(
         "Traditional Romanian Main Courses" to listOf(
@@ -1930,7 +1930,7 @@ val mockRestaurantBucharest2 = Restaurant(
     rating = 4.3,
     deliveryCharge = 3.00,
     eta = "25-35 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://timeoutbucuresti.ro/wp-content/uploads/2023/06/La-Mama-1-of-1.jpg",
     menu = mapOf(
         "Soups" to listOf(
@@ -2007,7 +2007,7 @@ val mockRestaurantBucharest3 = Restaurant(
     rating = 4.6,
     deliveryCharge = 2.00,
     eta = "20-30 min",
-    discountPercentage = 5.0,
+    discountPercentage = 0.15,
     imageUrl = "https://media.istockphoto.com/id/1018141890/ro/fotografie/dou%C4%83-pahare-goale-de-vin-st%C3%A2nd-%C3%AEntr-un-restaurant-%C3%AEntr-o-dup%C4%83-amiaz%C4%83-cald%C4%83-%C3%AEnsorit%C4%83.jpg?s=612x612&w=0&k=20&c=D9qQt7hEZoC94OrcybVqqc3mVr7BNkrqawNylDy1eXo=",
     menu = mapOf(
         "Breakfast & Brunch" to listOf(
@@ -2084,7 +2084,7 @@ val mockRestaurantBucharest4 = Restaurant(
     rating = 4.2,
     deliveryCharge = 2.80,
     eta = "30-40 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/12/b3/3d/5e/img-20180120-wa0004-largejpg.jpg?w=900&h=-1&s=1",
     menu = mapOf(
         "Pizzas" to listOf(
@@ -2161,7 +2161,7 @@ val mockRestaurantBucharest5 = Restaurant(
     rating = 4.8,
     deliveryCharge = 3.00,
     eta = "30-45 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1555947107/ro/fotografie/set-de-sushi-%C8%99i-maki.jpg?s=612x612&w=0&k=20&c=6uFhmFVJidsLHewQo_1fk47ZUje9_SECcF030WqicCU=",
     menu = mapOf(
         "Nigiri" to listOf(
@@ -2249,7 +2249,7 @@ val mockRestaurantBucharest6 = Restaurant(
     rating = 4.4,
     deliveryCharge = 2.20,
     eta = "20-30 min",
-    discountPercentage = 15.0,
+    discountPercentage = 0.15,
     imageUrl = "https://media.istockphoto.com/id/1295387240/ro/fotografie/mas%C4%83-delicioas%C4%83.jpg?s=612x612&w=0&k=20&c=lBYiRXF1pBl4QJLfb92wNW-OPotQmX2zIcnP2-ShxT8=",
     menu = mapOf(
         "Burgers" to listOf(
@@ -2342,7 +2342,7 @@ val mockRestaurantBucharest7 = Restaurant(
     rating = 4.5,
     deliveryCharge = 1.00,
     eta = "15-25 min",
-    discountPercentage = 10.0,
+    discountPercentage = 0.10,
     imageUrl = "https://media.istockphoto.com/id/523400804/ro/fotografie/supermarket-legume.jpg?s=612x612&w=0&k=20&c=-VLf7Jhpds_GreymLzT_Hrmk9U1ciR5fW0uQrK8O-Ao=",
     menu = mapOf(
         "Build Your Own Salad" to listOf(
@@ -2409,7 +2409,7 @@ val mockRestaurantBucharest8 = Restaurant(
     rating = 4.9,
     deliveryCharge = 1.80,
     eta = "20-30 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/497959594/ro/fotografie/pr%C4%83jituri-proaspete.jpg?s=612x612&w=0&k=20&c=O1eIZ_1JcgxH5SCfKm20cx0B70qmUHzjiy4pC34Y7M4=",
     menu = mapOf(
         "Cakes & Slices" to listOf(
@@ -2484,7 +2484,7 @@ val mockRestaurantBucharest9 = Restaurant(
     rating = 4.6,
     deliveryCharge = 3.20,
     eta = "35-45 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1295772368/ro/fotografie/macher-jhol-%C3%AEn-castron-negru-pe-partea-de-sus-mas%C4%83-ardezie-%C3%AEntuneric-buc%C4%83t%C4%83ria-indian%C4%83.jpg?s=612x612&w=0&k=20&c=27RhyjIJG2_SIePLSX6cFHj3jB6VcJdcK04f5F9EBAA=",
     menu = mapOf(
         "Chicken Curries" to listOf(
@@ -2551,7 +2551,7 @@ val mockRestaurantBucharest10 = Restaurant(
     rating = 4.7,
     deliveryCharge = 2.00,
     eta = "25-35 min",
-    discountPercentage = 5.0,
+    discountPercentage = 0.15,
     imageUrl = "https://media.istockphoto.com/id/1369489882/ro/fotografie/varietate-de-alimente-vegane-pe-baz%C4%83-de-proteine-pe-baz%C4%83-de-plante.jpg?s=612x612&w=0&k=20&c=HYAHkT-H5BI3DzWlXZhNHsw0CKDrSenXZBtl1Zs2E3M=",
     menu = mapOf(
         "Main Dishes" to listOf(
@@ -2618,7 +2618,7 @@ val mockRestaurantBucharest11 = Restaurant(
     rating = 4.3,
     deliveryCharge = 2.70,
     eta = "30-40 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1402612822/ro/fotografie/prieteni-care-au-o-petrecere-la-gratar.jpg?s=612x612&w=0&k=20&c=O8nfK1QKLEqWIchQehBun8s6L5SEqSKMeLXZHxxYPC8=",
     menu = mapOf(
         "Grilled Meats" to listOf(
@@ -2701,7 +2701,7 @@ val mockRestaurantBucharest12 = Restaurant(
     rating = 4.7,
     deliveryCharge = 1.70,
     eta = "15-25 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1467739359/ro/fotografie/cea%C8%99c%C4%83-de-cafea-cu-fum-%C8%99i-boabe-de-cafea-pe-fundal-vechi-de-lemn.jpg?s=612x612&w=0&k=20&c=nTTPHzA-iLG02H5Gt0oH6wPtfZn6Jw2IXXPrxCungao=",
     menu = mapOf(
         "Coffee Specialties" to listOf(
@@ -2776,7 +2776,7 @@ val mockRestaurantBucharest13 = Restaurant(
     rating = 4.4,
     deliveryCharge = 2.90,
     eta = "30-40 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/926663774/ro/fotografie/pad-thai-legume-vegetariene-udon-t%C4%83i%C8%9Bei-%C3%AEntr-un-fundal-%C3%AEntunecat-vedere-de-top-m%C3%A2ncare.jpg?s=612x612&w=0&k=20&c=KJscAeCb1XYDL4Sz64CoVqQwGSQlnI1ztE2eTcaGOnc=",
     menu = mapOf(
         "Ramen Bowls" to listOf(
@@ -2843,7 +2843,7 @@ val mockRestaurantBucharest14 = Restaurant(
     rating = 4.1,
     deliveryCharge = 2.00,
     eta = "20-30 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1412706551/ro/fotografie/burger-pe-o-mas%C4%83-de-lemn-%C3%AEntunecat%C4%83.jpg?s=612x612&w=0&k=20&c=9McSR-b1Agi4SXy43MBCH8uLNbWl8aqwM5z_n8Y1O4c=",
     menu = mapOf(
         "Signature Burgers" to listOf(
@@ -2910,7 +2910,7 @@ val mockRestaurantBucharest15 = Restaurant(
     rating = 4.5,
     deliveryCharge = 2.60,
     eta = "25-35 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1189709277/ro/fotografie/paste-penne-cu-rosii-prajite-sos-branza-mozzarella-fundal-de-piatr%C4%83-gri-vedere-de-sus.jpg?s=612x612&w=0&k=20&c=tSxc67J6G01A3JaOm_8oI_IchPX3lo7G1JnKNqAX87Y=",
     menu = mapOf(
         "Classic Pasta" to listOf(
@@ -2977,7 +2977,7 @@ val mockRestaurantBucharest16 = Restaurant(
     rating = 4.3,
     deliveryCharge = 3.10,
     eta = "30-40 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1341928512/ro/fotografie/tacos-mexican-de-cochinita-pibil-buc%C4%83t%C4%83ria-maya%C8%99%C4%83-din-yucatan-mexic.jpg?s=612x612&w=0&k=20&c=YISmtypNf7ZNJH3GDlXl5Zx8IWJmjLx5WdWgbDl5XwI=",
     menu = mapOf(
         "Tacos & Burritos" to listOf(
@@ -3044,7 +3044,7 @@ val mockRestaurantBucharest17 = Restaurant(
     rating = 4.6,
     deliveryCharge = 1.90,
     eta = "20-30 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1468860049/ro/fotografie/femeie-de-fitness-mananca-un-castron-poke-s%C4%83n%C4%83tos-%C3%AEn-buc%C4%83t%C4%83rie-la-domiciliu.jpg?s=612x612&w=0&k=20&c=idD-VaMPtiGAFyKp4TLyL99Fs-02eoDdb0EbRHCEapc=",
     menu = mapOf(
         "Grain Bowls" to listOf(
@@ -3111,7 +3111,7 @@ val mockRestaurantBucharest18 = Restaurant(
     rating = 4.4,
     deliveryCharge = 2.30,
     eta = "20-30 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1285922642/ro/fotografie/concept-de-m%C3%A2ncare-greceasc%C4%83-cu-o-salat%C4%83-de-fermieri-%C3%AEn-fa%C8%9Ba-m%C4%83rii-egee.jpg?s=612x612&w=0&k=20&c=jSyW3j7PaiOl5hTGUQnmIGNqH-gGa7ZjQh51KyHp794=",
     menu = mapOf(
         "Souvlaki & Gyros" to listOf(
@@ -3168,7 +3168,7 @@ val mockRestaurantBucharest19 = Restaurant(
     rating = 4.8,
     deliveryCharge = 1.60,
     eta = "15-25 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/496564915/ro/fotografie/p%C3%A2ine-%C8%99i-chifle.jpg?s=612x612&w=0&k=20&c=NpD2WqXezZTCO6qZYdyldOrardWv_G0lqCyZXqzOaKY=",
     menu = mapOf(
         "Freshly Baked Bread" to listOf(
@@ -3235,7 +3235,7 @@ val mockRestaurantBucharest20 = Restaurant(
     rating = 4.5,
     deliveryCharge = 3.00,
     eta = "25-35 min",
-    discountPercentage = 10.0,
+    discountPercentage = 0.10,
     imageUrl = "https://media.istockphoto.com/id/588595864/ro/fotografie/aburind-legume-mixte-%C3%AEn-wok-g%C4%83tit-stil-asiatic.jpg?s=612x612&w=0&k=20&c=pV59AVHvKsM1Gg16UeCIZIEynkAbcss_bUT10afCQc4=",
     menu = mapOf(
         "Wok Your Own" to listOf(
@@ -3294,7 +3294,7 @@ val mockRestaurantBucharest21 = Restaurant(
     rating = 4.0,
     deliveryCharge = 4.00,
     eta = "45-60 min",
-    discountPercentage = 0.0,
+    discountPercentage = 0.1,
     imageUrl = "https://media.istockphoto.com/id/1438530555/ro/fotografie/charcuterie-goal%C4%83-concepte-de-afaceri-mici.jpg?s=612x612&w=0&k=20&c=lcej_BZlo5O3Dpuk9u8Xn08VEy5olVSLONVqEbl__NM=",
     menu = mapOf(
         "Fresh Produce" to listOf(

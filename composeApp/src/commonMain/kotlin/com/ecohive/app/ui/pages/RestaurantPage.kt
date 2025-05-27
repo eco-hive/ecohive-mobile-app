@@ -98,6 +98,7 @@ fun RestaurantPage(
                             items(foodItems) { foodItem ->
                                 FoodItemElement(
                                     foodItem = foodItem,
+                                    discountPercentage = restaurant.discountPercentage,
                                     modifier = Modifier.clickable {
                                         goToFoodItemDetails(foodItem.id)
                                     }
