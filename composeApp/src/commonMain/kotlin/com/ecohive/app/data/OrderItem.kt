@@ -18,6 +18,8 @@ data class Order(
     val orderID: Int,
     val restaurant: Restaurant,
     val items: List<OrderItem>,
+    val date: String,
+    val time: String
 ) {
     fun calculateTotalPrice(): Double {
         return items.sumOf { it.totalPrice }
@@ -31,4 +33,5 @@ data class Order(
         return items.sumOf { it.subTotal }
     }
 }
+
 fun Double.toItemPrice(): String = "$this RON"

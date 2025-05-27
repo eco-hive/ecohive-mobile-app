@@ -11,9 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -21,6 +24,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +45,7 @@ fun FoodItemPage(
     foodItem: FoodItem,
     discount: Double,
     onClose: () -> Unit,
+    onAddItemToCart: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -53,7 +61,7 @@ fun FoodItemPage(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(12.dp)
-                    .background(Color.Black.copy(alpha = 0.4f), shape = RoundedCornerShape(50))
+                    .background(Color.Black.copy(alpha = 0.4f), shape = CircleShape)
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
@@ -103,12 +111,12 @@ fun FoodItemPage(
                 )
             }
 
-            Spacer(Modifier.height(12.dp))
 
             // Food Item Ingredients
             Text(
                 text = "Ingredients:",
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(top = 12.dp)
             )
 
             Text(
@@ -121,6 +129,7 @@ fun FoodItemPage(
             // Select Quantity and Add Button
             Row(verticalAlignment = Alignment.CenterVertically) {
                 // Quantity selector
+                var quantity by remember{ mutableIntStateOf(1) }
                 Box(
                     modifier = Modifier
                         .border(
@@ -132,21 +141,36 @@ fun FoodItemPage(
                         .padding(horizontal = 12.dp, vertical = 8.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(
+                            onClick = {
+                                quantity -= 1
+                            },
+                            enabled = quantity > 1
+                        ){
+                            Icon(
+                                imageVector = Icons.Default.Remove,
+                                contentDescription = "Decrease Quantity",
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                         Text(
-                            "-",
-                            Modifier.padding(end = 8.dp),
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
-                        Text(
-                            "1",
+                            quantity.toString(),
                             Modifier.padding(horizontal = 4.dp),
                             color = MaterialTheme.colorScheme.onBackground,
                         )
-                        Text(
-                            "+",
-                            Modifier.padding(start = 8.dp),
-                            color = MaterialTheme.colorScheme.onBackground,
-                        )
+                        IconButton(
+                            onClick = {
+                                // increase quantity
+                                quantity+=1
+                            },
+                            enabled = quantity > 0,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Add Quantity",
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 }
 
@@ -154,7 +178,9 @@ fun FoodItemPage(
 
                 // Add Button
                 Button(
-                    onClick = { /* Add to cart */ },
+                    onClick = {
+                        onAddItemToCart(quantity)
+                    },
                     colors = ButtonDefaults.buttonColors().copy(
                         containerColor = MaterialTheme.colorScheme.tertiary,
                         contentColor = MaterialTheme.colorScheme.onTertiary
@@ -162,7 +188,7 @@ fun FoodItemPage(
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.height(48.dp)
                 ) {
-                    Text("Add", color = Color.White)
+                    Text("Add to cart", color = Color.White)
                 }
             }
         }

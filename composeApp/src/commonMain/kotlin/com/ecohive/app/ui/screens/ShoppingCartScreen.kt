@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.ecohive.app.data.FoodItem
 import com.ecohive.app.data.Order
 import com.ecohive.app.data.OrderItem
 import com.ecohive.app.data.toItemPrice
@@ -423,26 +424,23 @@ private fun DeliveryLocationSection(
 fun ShoppingCartScreen(
     currentOrder: Order,
     onItemClick: (OrderItem) -> Unit,
-    onPlaceOrder: (Order) -> Unit,
+    onPlaceOrder: () -> Unit,
     onBackClick: () -> Unit,
     onAddMoreClick: () -> Unit,
+    onChangeOrderItem: (FoodItem, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var currentOrderShown by remember { mutableStateOf(currentOrder) }
     var deliverySelection by remember { mutableStateOf(true) }
     var deliveryLocation by remember { mutableStateOf("") }
     LazyColumn(modifier.background(color = MaterialTheme.colorScheme.surface), contentPadding = PaddingValues(8.dp)) {
         //first card -> order items
         item {
             OrderSection(
-                orderItems = currentOrderShown.items,
+                orderItems = currentOrder.items,
                 onItemClick = onItemClick,
-                restaurantName = currentOrderShown.restaurant.name,
+                restaurantName = currentOrder.restaurant.name,
                 onOrderItemChange = { orderItem ->
-                    currentOrderShown = currentOrderShown.copy(
-                        items = if (orderItem.quantity == 0) currentOrderShown.items.filter { it.orderID != orderItem.orderID }
-                        else currentOrderShown.items.map { if (it.orderID == orderItem.orderID) orderItem else it }
-                    )
+                    onChangeOrderItem(orderItem.foodItem, orderItem.quantity)
                 },
                 onAddMoreClick = onAddMoreClick,
                 onBackClick = onBackClick,
@@ -488,18 +486,18 @@ fun ShoppingCartScreen(
             var totalSum by remember {
                 mutableStateOf(0.0)
             }
-            LaunchedEffect(currentOrderShown, deliverySelection) {
+            LaunchedEffect(currentOrder, deliverySelection) {
                 totalSum =
-                    SERVICE_FEE + currentOrderShown.calculateTotalPrice() + if (deliverySelection) currentOrderShown.restaurant.deliveryCharge else 0.0
+                    SERVICE_FEE + currentOrder.calculateTotalPrice() + if (deliverySelection) currentOrder.restaurant.deliveryCharge else 0.0
             }
             CostExplainerSection(
-                subtotal = currentOrderShown.calculateSubTotal(),
-                discount = currentOrderShown.calculateTotalDiscount(),
+                subtotal = currentOrder.calculateSubTotal(),
+                discount = currentOrder.calculateTotalDiscount(),
                 deliveryCharge = if (deliverySelection)
-                    currentOrderShown.restaurant.deliveryCharge else 0.0,
+                    currentOrder.restaurant.deliveryCharge else 0.0,
                 serviceFee = 4.0,
                 totalSum = totalSum,
-                placeOrder = { onPlaceOrder(currentOrderShown) },
+                placeOrder = onPlaceOrder,
                 modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.background)
                     .padding(top = 16.dp)
