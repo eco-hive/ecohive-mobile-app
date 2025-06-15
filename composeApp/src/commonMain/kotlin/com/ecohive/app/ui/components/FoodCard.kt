@@ -53,7 +53,7 @@ fun SimpleFoodCard(
 fun PreviewSimpleFoodCard() {
     SimpleFoodCard(
         foodItem = FoodItem(
-            id = "1",
+            id = 1,
             imageUrl = "", // No image yet
             name = "Margherita Pizza",
             price = 12.99,

@@ -1,29 +1,37 @@
 package com.ecohive.app.data
 
 data class OrderItem(
+    val orderID: Int,
+    val foodItem: FoodItem,
+    val quantity: Int,
+    val restaurant: Restaurant
+) {
+    val totalPrice: Double
+        get() = foodItem.price * quantity * restaurant.discountPercentage
+    val totalDiscount: Double
+        get() = foodItem.price * quantity * (1 - restaurant.discountPercentage)
+    val subTotal: Double
+        get() = foodItem.price * quantity
+}
+
+data class Order(
+    val orderID: Int,
     val restaurant: Restaurant,
-    val price: Double,
+    val items: List<OrderItem>,
     val date: String,
-    val time: String,
-)
+    val time: String
+) {
+    fun calculateTotalPrice(): Double {
+        return items.sumOf { it.totalPrice }
+    }
 
-val mockOrderItem1 = OrderItem(
-    restaurant = mockRestaurant1,
-    price = 20.00,
-    date = "2025-01-01",
-    time = "14:00",
-)
+    fun calculateTotalDiscount(): Double {
+        return items.sumOf { it.totalDiscount }
+    }
 
-val mockOrderItem2 = OrderItem(
-    restaurant = mockRestaurant2,
-    price = 24.99,
-    date = "2025-02-14",
-    time = "12:33",
-)
+    fun calculateSubTotal(): Double {
+        return items.sumOf { it.subTotal }
+    }
+}
 
-val mockOrderItem3 = OrderItem(
-    restaurant = mockRestaurant3,
-    price = 19.80,
-    date = "2025-03-25",
-    time = "18:45",
-)
+fun Double.toItemPrice(): String = "${this.roundToTwoDecimals()} RON"

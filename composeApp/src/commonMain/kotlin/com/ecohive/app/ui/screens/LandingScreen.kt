@@ -50,6 +50,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -59,7 +60,9 @@ import com.ecohive.app.data.FoodItem
 import com.ecohive.app.data.Restaurant
 import com.ecohive.app.data.RestaurantType
 import com.ecohive.app.data.availableLocations
+import com.ecohive.app.data.toItemPrice
 import ecohive.composeapp.generated.resources.Res
+import ecohive.composeapp.generated.resources._collectCommonMainFont0Resources
 import ecohive.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
 
@@ -285,7 +288,7 @@ fun CategoryChips(
 }
 
 @Composable
-fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier) {
+fun FoodItemElement(foodItem: FoodItem, discountPercentage: Double, modifier: Modifier = Modifier) {
     Card(modifier.padding(horizontal = 8.dp, vertical = 12.dp).width(150.dp).height(180.dp)) {
         Box(Modifier.padding(12.dp)) {
             AsyncImage(
@@ -308,10 +311,21 @@ fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier) {
             )
 
             // Food Price
-            Text(
-                text = "€${foodItem.price}",
-                style = MaterialTheme.typography.bodyLarge,
-            )
+            Row {
+                Text(
+                    text = foodItem.price.toItemPrice(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textDecoration = TextDecoration.LineThrough,
+                    color = MaterialTheme.colorScheme.error
+                )
+                Text(
+                    text = (foodItem.price * (1 - discountPercentage)).toItemPrice(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(horizontal = 4.dp)
+                )
+            }
+
         }
     }
 }
@@ -320,6 +334,7 @@ fun FoodItemElement(foodItem: FoodItem, modifier: Modifier = Modifier) {
 fun RestaurantItem(
     restaurant: Restaurant,
     goToRestaurantPage: (Int) -> Unit,
+    goToFoodItemDetailsPage: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val foodItemList = restaurant.menu.values.flatten().take(5)
@@ -351,8 +366,17 @@ fun RestaurantItem(
             }
         }
         LazyRow {
-            items(foodItemList) {
-                FoodItemElement(it)
+            items(foodItemList) { foodItem ->
+                FoodItemElement(
+                    foodItem = foodItem,
+                    discountPercentage = restaurant.discountPercentage,
+                    modifier = Modifier.clickable {
+                        goToFoodItemDetailsPage(
+                            restaurant.id,
+                            foodItem.id
+                        )
+                    }
+                )
             }
         }
     }
@@ -365,6 +389,8 @@ fun LandingScreen(
     locationSelected: AvailableLocation,
     onLocationSelected: (AvailableLocation) -> Unit,
     goToRestaurantPage: (Int) -> Unit,
+    onCartClicked: () -> Unit,
+    goToFoodItemDetailsPage: (Int, Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -372,7 +398,7 @@ fun LandingScreen(
             EcoHiveTopBar(
                 locationSelected = locationSelected,
                 onClickLocation = onLocationSelected,
-                onCartClicked = {},
+                onCartClicked = onCartClicked,
                 modifier = Modifier.fillMaxWidth()
             )
         },
@@ -412,7 +438,7 @@ fun LandingScreen(
             }
             //restaurant list
             items(filteredRestaurants) {
-                RestaurantItem(it, goToRestaurantPage)
+                RestaurantItem(it, goToRestaurantPage, goToFoodItemDetailsPage)
             }
         }
 
