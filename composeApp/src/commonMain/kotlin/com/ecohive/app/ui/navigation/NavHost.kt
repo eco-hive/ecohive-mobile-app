@@ -90,12 +90,6 @@ fun topLevelDestinations() = listOf(
         "Restaurants"
     ),
     BottomNavDestinations(
-        Settings,
-        Icons.Default.Settings,
-        Icons.Outlined.Settings,
-        "Settings"
-    ),
-    BottomNavDestinations(
         Account,
         Icons.Default.AccountCircle,
         Icons.Outlined.AccountCircle,
@@ -156,11 +150,7 @@ fun EcoHiveApp(
                     onClick = { navHostController.navigate(RestaurantDetails(it)) }
                 )
             }
-            composable<Settings> {
-                Text("Settings")
-            }
             composable<Account> {
-
                 AccountScreen(
                     user = currentUser,
                     orders = allOrders
