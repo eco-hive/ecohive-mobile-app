@@ -11,27 +11,36 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.TaskAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +60,7 @@ const val SERVICE_FEE: Double = 4.0
 private fun OrderItemElement(
     orderItem: OrderItem,
     onChange: (OrderItem) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -157,7 +166,7 @@ private fun OrderSection(
     restaurantName: String,
     onAddMoreClick: () -> Unit,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(shape = RoundedCornerShape(12.dp), modifier = modifier) {
         Row(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
@@ -221,7 +230,7 @@ private fun DeliverySection(
     deliveryCharge: Double,
     selectDelivery: (Boolean) -> Unit,
     deliverySelected: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier) {
         Text(
@@ -308,7 +317,7 @@ private fun CostExplainerSection(
     serviceFee: Double,
     totalSum: Double,
     placeOrder: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(modifier) {
         Row {
@@ -394,7 +403,7 @@ private fun CostExplainerSection(
 private fun DeliveryLocationSection(
     location: String,
     onChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Card(modifier = modifier) {
         Text(
@@ -420,6 +429,7 @@ private fun DeliveryLocationSection(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingCartScreen(
     currentOrder: Order,
@@ -428,11 +438,20 @@ fun ShoppingCartScreen(
     onBackClick: () -> Unit,
     onAddMoreClick: () -> Unit,
     onChangeOrderItem: (FoodItem, Int) -> Unit,
-    modifier: Modifier = Modifier
+    onGoToAccountScreen: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var deliverySelection by remember { mutableStateOf(true) }
     var deliveryLocation by remember { mutableStateOf("") }
-    LazyColumn(modifier.background(color = MaterialTheme.colorScheme.surface), contentPadding = PaddingValues(8.dp)) {
+    val modalBottomSheetState = rememberModalBottomSheetState()
+    var showOrderPlacedBottomSheet by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    LazyColumn(
+        modifier.background(color = MaterialTheme.colorScheme.surface),
+        contentPadding = PaddingValues(8.dp)
+    ) {
         //first card -> order items
         item {
             OrderSection(
@@ -497,13 +516,71 @@ fun ShoppingCartScreen(
                     currentOrder.restaurant.deliveryCharge else 0.0,
                 serviceFee = 4.0,
                 totalSum = totalSum,
-                placeOrder = onPlaceOrder,
+                placeOrder = {
+                    showOrderPlacedBottomSheet = true
+                },
                 modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.background)
                     .padding(top = 16.dp)
                     .fillMaxWidth()
                     .wrapContentHeight()
             )
+        }
+    }
+
+    if (showOrderPlacedBottomSheet) {
+        ModalBottomSheet(
+            sheetState = modalBottomSheetState,
+            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+            containerColor = MaterialTheme.colorScheme.background,
+            onDismissRequest = {
+                onBackClick()
+                onPlaceOrder()
+            }
+        ) {
+            Text(
+                text = "Order #${currentOrder.orderID}",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Icon(
+                imageVector = Icons.Default.TaskAlt,
+                contentDescription = null,
+                modifier = Modifier.align(Alignment.CenterHorizontally).size(80.dp),
+                tint = MaterialTheme.colorScheme.tertiary
+            )
+            Row(
+                modifier = Modifier.padding(vertical = 20.dp, horizontal = 16.dp).clickable {
+                    onGoToAccountScreen()
+                    onPlaceOrder()
+                }
+            ) {
+                Text(
+                    text = "Go to account details",
+                    style = MaterialTheme.typography.titleLarge,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    imageVector = Icons.Default.ArrowRight,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+            androidx.compose.material3.TextButton(
+                onClick = {
+                    onBackClick()
+                    onPlaceOrder()
+                },
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth().padding(horizontal = 8.dp, vertical = 12.dp),
+                colors = androidx.compose.material3.ButtonDefaults.textButtonColors().copy(containerColor = MaterialTheme.colorScheme.tertiary, contentColor = MaterialTheme.colorScheme.onTertiary)
+            ) {
+                Text(
+                    text = "DONE",
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
         }
     }
 }

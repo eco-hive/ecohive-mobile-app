@@ -1,10 +1,10 @@
-package com.example.compose
+package com.ecohive.app.ui.theme
+
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import com.example.ui.theme.AppTypography
 
 
 private val lightScheme = lightColorScheme(
@@ -50,18 +50,18 @@ data class ColorFamily(
     val color: Color,
     val onColor: Color,
     val colorContainer: Color,
-    val onColorContainer: Color
+    val onColorContainer: Color,
 )
 
 
 @Composable
 fun EcoHiveAppTheme(
-    content: @Composable() () -> Unit
+    content: @Composable() () -> Unit,
 ) {
-  MaterialTheme(
-    colorScheme = lightScheme,
-    typography = AppTypography(),
-    content = content
-  )
+    MaterialTheme(
+        colorScheme = lightScheme,
+        typography = AppTypography(),
+        content = content
+    )
 }
 

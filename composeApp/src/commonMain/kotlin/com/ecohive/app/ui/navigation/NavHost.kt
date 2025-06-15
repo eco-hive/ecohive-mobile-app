@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -36,12 +37,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.ecohive.app.data.restaurantLocationList
 import com.ecohive.app.ui.pages.FoodItemPage
 import com.ecohive.app.ui.pages.RestaurantPage
 import com.ecohive.app.ui.screens.LandingScreen
 import com.ecohive.app.ui.screens.AccountScreen
 import com.ecohive.app.ui.screens.RestaurantsScreen
 import com.ecohive.app.ui.screens.ShoppingCartScreen
+import kotlinx.coroutines.flow.filter
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -107,8 +110,8 @@ fun EcoHiveApp(
     navHostController: NavHostController = rememberNavController(),
     appViewModel: AppViewModel = viewModel { AppViewModel() },
 ) {
-    val restaurantList = appViewModel.restaurantList
     val selectedLocation by appViewModel.selectedLocation.collectAsStateWithLifecycle()
+    val restaurantList by appViewModel.restaurantList.collectAsStateWithLifecycle(emptyList())
     val currentOrder by appViewModel.currentOrder.collectAsStateWithLifecycle()
     val currentUser by appViewModel.currentUser.collectAsStateWithLifecycle()
     val allOrders by appViewModel.allOrders.collectAsStateWithLifecycle()
@@ -191,7 +194,6 @@ fun EcoHiveApp(
                         },
                         onPlaceOrder = {
                             appViewModel.placeOrder()
-                            navHostController.navigate(Account)
                         },
                         onAddMoreClick = {
                             //goto restaurant page
@@ -207,6 +209,10 @@ fun EcoHiveApp(
                                 newQuantity = quantity,
                             )
 
+                        },
+                        onGoToAccountScreen = {
+                            navHostController.popBackStack()
+                            navHostController.navigate(Account)
                         },
                         modifier = Modifier.fillMaxSize()
                     )
