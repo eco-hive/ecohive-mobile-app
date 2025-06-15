@@ -9,9 +9,11 @@ import com.ecohive.app.data.Restaurant
 import com.ecohive.app.data.User
 import com.ecohive.app.data.mockUserItem
 import com.ecohive.app.data.restaurantLocationList
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -26,8 +28,7 @@ class AppViewModel : ViewModel() {
         _selectedLocation.update { newLocation }
     }
 
-    val restaurantList: List<Restaurant> =
-        restaurantLocationList[_selectedLocation.value] ?: emptyList()
+    val restaurantList: Flow<List<Restaurant>> = _selectedLocation.map { location -> restaurantLocationList[location] ?: emptyList() }
 
     private val _allOrders: MutableStateFlow<List<Order>> = MutableStateFlow(emptyList())
     val allOrders: StateFlow<List<Order>> = _allOrders.asStateFlow()
@@ -44,7 +45,7 @@ class AppViewModel : ViewModel() {
                 val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 val orderID = (_allOrders.value.maxOfOrNull { it.orderID } ?: 1) + 1
                 val restaurant =
-                    restaurantList.find { it.id == restaurantID } ?: restaurantList.first()
+                    restaurantLocationList[_selectedLocation.value]!!.find { it.id == restaurantID } ?: restaurantLocationList[_selectedLocation.value]!!.first()
                 Order(
                     orderID = orderID,
                     restaurant = restaurant,

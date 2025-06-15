@@ -3404,7 +3404,7 @@ val bucharestRestaurantList = listOf(
     mockRestaurantBucharest21
 )
 
-val restaurantLocationList = mapOf<AvailableLocation, List<Restaurant>>(
+val restaurantLocationList = mapOf(
     AvailableLocation.CLUJ to clujRestaurantList,
     AvailableLocation.BRASOV to emptyList(),
     AvailableLocation.SIBIU to restaurantList.subList(0,1),
